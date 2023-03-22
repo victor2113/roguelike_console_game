@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RogueFefu
 {
@@ -10,7 +11,7 @@ namespace RogueFefu
     {
         public void Begin()
         {
-
+            Console.CursorVisible = false;
             string promt = @"
   ______    __             _                                    
  |  ____|  / _|           | |                                   
@@ -29,6 +30,7 @@ Use the arrow keys to choose options and press enter to select one";
             string[] options = { "Start", "About", "Exit" };
             StartMenu startMenu = new StartMenu(options , promt);
             int selectedIndex = startMenu.Run();
+            
 
 
 
@@ -38,7 +40,7 @@ Use the arrow keys to choose options and press enter to select one";
                     RunTheGame();
                     break;
                 case 1:
-                    AboutText();
+                    AboutGameText();
                     break;
                 case 2:
                     ExitGame();
@@ -52,11 +54,12 @@ Use the arrow keys to choose options and press enter to select one";
         }
         private void ExitGame()
         {
+            Console.Clear();
             Console.WriteLine("\nPress any key to exit....");
             Console.ReadKey(true);
             Environment.Exit(0);
         }
-        private void AboutText()
+        private void AboutGameText()
         {
             Console.Clear();
             Console.WriteLine("bla bla");
@@ -65,10 +68,51 @@ Use the arrow keys to choose options and press enter to select one";
         }
         private void RunTheGame()
         {
-            Console.Clear();
-            Console.WriteLine("Game Started");
-            ExitGame();
+            string[] options = { "Next", "Generate", "Exit" };
+            StartMenu startMenu = new StartMenu(options, "Map");
+            int selectedIndex = startMenu.Run();
+            switch (selectedIndex)
+            {
+                case 0:
+                    Console.Clear();
+                    LoadMapLevel();
+                    Console.ReadKey(true);
+                    
+                    Generate();
+                    Console.Clear();
+                    LoadMapLevel();
+                    Console.ReadKey(true);
+                    ExitGame();
+
+                    break;
+                case 1:
+                    ExitGame();
+                    break;
+                case 2:
+                    ExitGame();
+                    break;
+
+
+            }
+
+            Console.ReadKey(true);
         }
+        private void LoadMapLevel()
+        {
+            MapLevel newLevel = new MapLevel();
+
+            string level = newLevel.MapText();
+            Console.WriteLine(level);
+
+        }
+        private void Generate()
+        {
+            for (int i = 0; i < 101; i++)
+                LoadMapLevel();
+
+        }
+
+        
     }
 
 }

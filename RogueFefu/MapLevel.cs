@@ -59,7 +59,7 @@ namespace RogueFefu
 
         private bool VerifyMap()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         private void MapGeneration() //Генерация всей карты
@@ -195,6 +195,21 @@ namespace RogueFefu
             returnVal = (regionX) + ((regionY - 1) * 3);
 
             return returnVal;
+        }
+        public string MapText()
+        {
+            
+            StringBuilder sbReturn = new StringBuilder();
+
+            for (int y = 0; y <= MAP_HT; y++)
+            {
+                for (int x = 0; x <= MAP_WD; x++)
+                    sbReturn.Append(levelMap[x, y].DisplayCharacter);
+
+                sbReturn.Append("\n");
+            }
+
+            return sbReturn.ToString();
         }
     }
     internal class MapSpace // базовый класс клетки карты
