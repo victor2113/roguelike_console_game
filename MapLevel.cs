@@ -31,6 +31,7 @@ namespace RogueFefu
         private const char ROOM_DOOR = '╬';
         private const char HALLWAY = '▓';
         private const char STAIRWAY = '≣';
+        public const char GOLD = '*';
         private const char EMPTY = ' ';
         private const int REGION_WD = 26;
         private const int REGION_HT = 8;
@@ -42,8 +43,11 @@ namespace RogueFefu
         private const int MIN_ROOM_HT = 4;
         private const int ROOM_CREATE_PCT = 90;
         private const int ROOM_EXIT_PCT = 90;
+        private const int ROOM_GOLD_PCT = 50;
 
         private MapSpace[,] levelMap = new MapSpace[80, 25];
+
+        private static Random rand = new Random();
 
         public MapLevel()
         {
@@ -120,6 +124,7 @@ namespace RogueFefu
             int regionNumber = GetRegionNumber(westWallX, northWallY);// Часть карты в которой расположена комната
             int doorway = 0, doorCount = 0;
             var rand = new Random();
+            int goldX, goldY;
 
             for (int y = northWallY; y <= southWallY; y++)
             {
@@ -182,6 +187,18 @@ namespace RogueFefu
             levelMap[eastWallX, northWallY] = new MapSpace(CORNER_NE, false, false, eastWallX, northWallY);
             levelMap[westWallX, southWallY] = new MapSpace(CORNER_SW, false, false, westWallX, southWallY);
             levelMap[eastWallX, southWallY] = new MapSpace(CORNER_SE, false, false, eastWallX, southWallY);
+
+            if (rand.Next(1, 101) > ROOM_GOLD_PCT)
+            {
+                goldX = westWallX; goldY = northWallY; //место рождения золота
+                while (levelMap[goldX, goldY].MapCharacter != ROOM_INT)
+                {
+                    goldX = rand.Next(westWallX + 1, eastWallX);
+                    goldY = rand.Next(northWallY + 1, southWallY);
+                }
+
+                levelMap[goldX, goldY] = new MapSpace(GOLD, goldX, goldY);
+            }
         }
 
         private int GetRegionNumber(int RoomAnchorX, int RoomAnchorY)//функция номер части карты
