@@ -1,0 +1,15 @@
+C:\Users\1\source\repos\RogueFefu\RogueFefu\bin\Debug\net6.0\RogueFefu.exe
+C:\Users\1\source\repos\RogueFefu\RogueFefu\bin\Debug\net6.0\RogueFefu.deps.json
+C:\Users\1\source\repos\RogueFefu\RogueFefu\bin\Debug\net6.0\RogueFefu.runtimeconfig.json
+C:\Users\1\source\repos\RogueFefu\RogueFefu\bin\Debug\net6.0\RogueFefu.dll
+C:\Users\1\source\repos\RogueFefu\RogueFefu\bin\Debug\net6.0\RogueFefu.pdb
+C:\Users\1\source\repos\RogueFefu\RogueFefu\obj\Debug\net6.0\RogueFefu.csproj.AssemblyReference.cache
+C:\Users\1\source\repos\RogueFefu\RogueFefu\obj\Debug\net6.0\RogueFefu.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\1\source\repos\RogueFefu\RogueFefu\obj\Debug\net6.0\RogueFefu.AssemblyInfoInputs.cache
+C:\Users\1\source\repos\RogueFefu\RogueFefu\obj\Debug\net6.0\RogueFefu.AssemblyInfo.cs
+C:\Users\1\source\repos\RogueFefu\RogueFefu\obj\Debug\net6.0\RogueFefu.csproj.CoreCompileInputs.cache
+C:\Users\1\source\repos\RogueFefu\RogueFefu\obj\Debug\net6.0\RogueFefu.dll
+C:\Users\1\source\repos\RogueFefu\RogueFefu\obj\Debug\net6.0\refint\RogueFefu.dll
+C:\Users\1\source\repos\RogueFefu\RogueFefu\obj\Debug\net6.0\RogueFefu.pdb
+C:\Users\1\source\repos\RogueFefu\RogueFefu\obj\Debug\net6.0\RogueFefu.genruntimeconfig.cache
+C:\Users\1\source\repos\RogueFefu\RogueFefu\obj\Debug\net6.0\ref\RogueFefu.dll
