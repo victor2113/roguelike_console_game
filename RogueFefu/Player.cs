@@ -1,9 +1,0 @@
-﻿class Player
-{
-    
-    public Player()
-    {
-
-    }
-
-}
