@@ -10,6 +10,9 @@ namespace RogueFefu
 
             Game game = new Game();
             game.Begin();
+
+            /*Battle battle = new Battle();
+            battle.Begin();*/
         }
     }
 }
