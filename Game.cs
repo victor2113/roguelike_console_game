@@ -103,9 +103,9 @@ Use the arrow keys to choose options and press enter to select one";
 
             string level = newLevel.MapText();
             Console.WriteLine(level);
-            HealthBar();
+            //HealthBar();
         }
-        public void HealthBar ()
+        /*public void HealthBar ()
         {
             //TakeDamage();
             Console.WriteLine("Your Health: ");
@@ -125,6 +125,7 @@ Use the arrow keys to choose options and press enter to select one";
             for (int i = 0; i < 101; i++)
                 LoadMapLevel();
         }
+        */
     }
 }
 
