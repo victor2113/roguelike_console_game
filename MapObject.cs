@@ -21,12 +21,5 @@ namespace RogueFefu
             Console.WriteLine(this.hp);
         }
     }
-    public class Player: MapObject
-    {
-        public string name;
-        public Player(int hp,int damage,string name): base(hp, damage)
-        {
-            this.name = name;
-        }
-    }
+    
 }
