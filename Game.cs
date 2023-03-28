@@ -9,10 +9,6 @@ namespace RogueFefu
 {
     internal class Game
     {
-        public MapLevel CurrentMap { get; set; }
-        public int CurrentLevel { get; }
-        public Player CurentPlayer { get; }
-        public int CurrentTurn { get; }
 
 
 

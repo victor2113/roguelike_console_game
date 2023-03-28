@@ -257,6 +257,32 @@ namespace RogueFefu
 
             }
         }
+        public MapSpace PlaceMapCharacter(char MapChar, bool Living)
+        {
+            // находим случайное свободное место
+
+            Random random = new Random();
+            int xPos = 1, yPos = 1;
+            bool freeSpace = false;
+
+            while (!freeSpace)
+            {
+                xPos = rand.Next(1, MAP_WD);
+                yPos = rand.Next(1, MAP_HT);
+
+                freeSpace = (levelMap[xPos, yPos].MapCharacter == ROOM_INT)
+                    && levelMap[xPos, yPos].DisplayCharacter == EMPTY
+                    && levelMap[xPos, yPos].ItemCharacter == null;
+            }
+
+            if (Living)
+                levelMap[xPos, yPos].DisplayCharacter = MapChar;
+            else
+                levelMap[xPos, yPos].ItemCharacter = MapChar;
+
+            return levelMap[xPos, yPos];
+        }
+
         private void HallwayGeneration()
         {
             // After all rooms are generated with exits and initial hallway characters, scan for any possible disconnected
@@ -538,6 +564,7 @@ namespace RogueFefu
     internal class MapSpace // базовый класс клетки карты
     {
         public char MapCharacter { get; set; }
+        public char? ItemCharacter { get; set; }
         public bool SearchRequired { get; set; }
         public char DisplayCharacter { get; set; }
 
@@ -548,6 +575,7 @@ namespace RogueFefu
         {
             this.MapCharacter = ' ';
             this.SearchRequired = false;
+            this.ItemCharacter = null;
             this.DisplayCharacter = ' ';
             this.X = 0;
             this.Y = 0;
@@ -574,6 +602,7 @@ namespace RogueFefu
         public MapSpace(char mapChar, Boolean hidden, Boolean search, int X, int Y)
         {
             this.MapCharacter = mapChar;
+            this.ItemCharacter = null;
             this.DisplayCharacter = hidden ? ' ' : mapChar;
             this.SearchRequired = search;
             this.X = X;
