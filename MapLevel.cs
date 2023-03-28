@@ -31,7 +31,6 @@ namespace RogueFefu
         private const char ROOM_DOOR = '╬';
         private const char HALLWAY = '▓';
         private const char STAIRWAY = '≣';
-        public const char GOLD = '*';
         private const char EMPTY = ' ';
         private const int REGION_WD = 26;
         private const int REGION_HT = 8;
@@ -43,11 +42,8 @@ namespace RogueFefu
         private const int MIN_ROOM_HT = 4;
         private const int ROOM_CREATE_PCT = 90;
         private const int ROOM_EXIT_PCT = 90;
-        private const int ROOM_GOLD_PCT = 50;
 
         private MapSpace[,] levelMap = new MapSpace[80, 25];
-
-        private static Random rand = new Random();
 
         public MapLevel()
         {
@@ -124,7 +120,6 @@ namespace RogueFefu
             int regionNumber = GetRegionNumber(westWallX, northWallY);// Часть карты в которой расположена комната
             int doorway = 0, doorCount = 0;
             var rand = new Random();
-            int goldX, goldY;
 
             for (int y = northWallY; y <= southWallY; y++)
             {
@@ -187,53 +182,6 @@ namespace RogueFefu
             levelMap[eastWallX, northWallY] = new MapSpace(CORNER_NE, false, false, eastWallX, northWallY);
             levelMap[westWallX, southWallY] = new MapSpace(CORNER_SW, false, false, westWallX, southWallY);
             levelMap[eastWallX, southWallY] = new MapSpace(CORNER_SE, false, false, eastWallX, southWallY);
-
-            if (rand.Next(1, 101) > ROOM_GOLD_PCT)
-            {
-                goldX = westWallX; goldY = northWallY; //место рождения золота
-                while (levelMap[goldX, goldY].MapCharacter != ROOM_INT)
-                {
-                    goldX = rand.Next(westWallX + 1, eastWallX);
-                    goldY = rand.Next(northWallY + 1, southWallY);
-                }
-
-                //levelMap[goldX, goldY].ItemCharacter = GOLD;
-                levelMap[goldX, goldY] = new MapSpace(GOLD, goldX, goldY);
-            }
-        }
-
-        public MapSpace PlaceMapCharacter(char MapChar, bool Living)
-        {
-            // находим случайное свободное место
-
-            Random random = new Random();
-            int xPos = 1, yPos = 1;
-            bool freeSpace = false;
-
-            while (!freeSpace)
-            {
-                xPos = rand.Next(1, MAP_WD);
-                yPos = rand.Next(1, MAP_HT);
-
-                freeSpace = (levelMap[xPos, yPos].MapCharacter == ROOM_INT)
-                    && levelMap[xPos, yPos].DisplayCharacter == EMPTY
-                    && levelMap[xPos, yPos].ItemCharacter == null;
-            }
-
-            if (Living)
-                levelMap[xPos, yPos].DisplayCharacter = MapChar;
-            else
-                levelMap[xPos, yPos].ItemCharacter = MapChar;
-
-            return levelMap[xPos, yPos];
-        }
-
-        public MapSpace MoveDisplayItem(MapSpace Start, MapSpace Destination)
-        {
-            levelMap[Destination.X, Destination.Y].DisplayCharacter = Start.DisplayCharacter;
-            levelMap[Start.X, Start.Y].DisplayCharacter = EMPTY;
-
-            return Destination;
         }
 
         private int GetRegionNumber(int RoomAnchorX, int RoomAnchorY)//функция номер части карты
@@ -248,7 +196,6 @@ namespace RogueFefu
 
             return returnVal;
         }
-
         public string MapText()
         {
 
@@ -257,12 +204,8 @@ namespace RogueFefu
             for (int y = 0; y <= MAP_HT; y++)
             {
                 for (int x = 0; x <= MAP_WD; x++)
-                    if (levelMap[x, y].DisplayCharacter != EMPTY)
-                        sbReturn.Append(levelMap[x, y].DisplayCharacter);
-                    else if (levelMap[x, y].ItemCharacter != null)
-                        sbReturn.Append(levelMap[x, y].ItemCharacter);
-                    else
-                        sbReturn.Append(levelMap[x, y].MapCharacter);
+                    sbReturn.Append(levelMap[x, y].DisplayCharacter);
+
                 sbReturn.Append("\n");
             }
 
@@ -272,7 +215,6 @@ namespace RogueFefu
     internal class MapSpace // базовый класс клетки карты
     {
         public char MapCharacter { get; set; }
-        public char? ItemCharacter { get; set; }
         public bool SearchRequired { get; set; }
         public char DisplayCharacter { get; set; }
 
@@ -282,7 +224,6 @@ namespace RogueFefu
         public MapSpace()
         {
             this.MapCharacter = ' ';
-            this.ItemCharacter = null;
             this.SearchRequired = false;
             this.DisplayCharacter = ' ';
             this.X = 0;
@@ -292,7 +233,6 @@ namespace RogueFefu
         public MapSpace(char mapChar, int X, int Y)
         {
             this.MapCharacter = mapChar;
-            this.ItemCharacter = null;
             this.SearchRequired = false;
             this.DisplayCharacter = mapChar;
             this.X = X;
@@ -302,7 +242,6 @@ namespace RogueFefu
         public MapSpace(char mapChar, MapSpace oldSpace)
         {
             this.MapCharacter = mapChar;
-
             this.DisplayCharacter = mapChar;
             this.SearchRequired = oldSpace.SearchRequired;
             this.X = oldSpace.X;
@@ -312,7 +251,6 @@ namespace RogueFefu
         public MapSpace(char mapChar, Boolean hidden, Boolean search, int X, int Y)
         {
             this.MapCharacter = mapChar;
-            this.ItemCharacter = null;
             this.DisplayCharacter = hidden ? ' ' : mapChar;
             this.SearchRequired = search;
             this.X = X;

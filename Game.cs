@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+
 namespace RogueFefu
 {
     internal class Game
     {
-        public Player player = new Player(5,1,"Arissu");
         public void Begin()
         {
             Console.CursorVisible = false;
@@ -23,6 +21,8 @@ namespace RogueFefu
  |_|  \___|_|  \__,_|  \__,_|\__,_|_| |_|\__, |\___|\___/|_| |_|
                                           __/ |                 
                                          |___/ RogueLike game project
+
+
 Use the arrow keys to choose options and press enter to select one";
 
 
@@ -65,7 +65,7 @@ Use the arrow keys to choose options and press enter to select one";
             Console.WriteLine("bla bla");
             Console.ReadKey(true);
             Begin();
-        }
+        }   
         private void RunTheGame()
         {
             string[] options = { "Next", "Generate", "Exit" };
@@ -77,16 +77,16 @@ Use the arrow keys to choose options and press enter to select one";
                     Console.Clear();
                     LoadMapLevel();
                     Console.ReadKey(true);
-
-                    //Generate();
-                    Console.Clear();
-                    LoadMapLevel();
-                    Console.ReadKey(true);
-                    ExitGame();
+                    RunTheGame();
+                    
 
                     break;
                 case 1:
-                    ExitGame();
+                    Generate();
+                    Console.Clear();
+                    LoadMapLevel();
+                    Console.ReadKey(true);
+                    RunTheGame();
                     break;
                 case 2:
                     ExitGame();
@@ -102,30 +102,18 @@ Use the arrow keys to choose options and press enter to select one";
             MapLevel newLevel = new MapLevel();
 
             string level = newLevel.MapText();
-            Console.WriteLine(level);
-            //HealthBar();
-        }
-        /*public void HealthBar ()
-        {
-            //TakeDamage();
-            Console.WriteLine("Your Health: ");
-            for (int i = 1; i <= player.hp; i++)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(0 + " ");
-            }
             Console.ForegroundColor = ConsoleColor.White;
-        }
-        public void TakeDamage()
-        {
-            player.hp--;
+            Console.WriteLine(level);
+
         }
         private void Generate()
         {
             for (int i = 0; i < 101; i++)
                 LoadMapLevel();
-        }
-        */
-    }
-}
 
+        }
+
+
+    }
+
+}
