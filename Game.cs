@@ -10,12 +10,7 @@ namespace RogueFefu
     internal class Game
     {
 
-
-
-        public void Begin()
-        {
-            Console.CursorVisible = false;
-            string promt = @"
+        public string GameLogo = @"
   ______    __             _                                    
  |  ____|  / _|           | |                                   
  | |__ ___| |_ _   _    __| |_   _ _ __   __ _  ___  ___  _ __  
@@ -26,15 +21,21 @@ namespace RogueFefu
                                          |___/ RogueLike game project
 
 
-Use the arrow keys to choose options and press enter to select one";
+";
+
+
+        public void Begin()
+        {
+            Console.CursorVisible = false;
 
 
 
             string[] options = { "Start", "About", "Exit" };
-            StartMenu startMenu = new StartMenu(options, promt);
+            StartMenu startMenu = new StartMenu(options);
+            UserInterface ui = new UserInterface(GameLogo, "Use the arrow keys to choose options and press enter to select one", startMenu);
             int selectedIndex = startMenu.Run();
 
-
+            
 
 
             switch (selectedIndex)
@@ -53,45 +54,47 @@ Use the arrow keys to choose options and press enter to select one";
             }
 
             Console.ReadKey(true);
-
         }
+
         private void ExitGame()
         {
-            Console.Clear();
-            Console.WriteLine("\nPress any key to exit....");
+            UserInterface ui = new UserInterface(GameLogo, "Press any key to exit....", null!);
             Console.ReadKey(true);
             Environment.Exit(0);
         }
         private void AboutGameText()
         {
-            Console.Clear();
-            Console.WriteLine("bla bla");
+            UserInterface ui = new UserInterface($"{GameLogo}\n\nBla bla bla", "Press any key to return", null!);
             Console.ReadKey(true);
             Begin();
         }
+
         private void RunTheGame()
         {
-            string[] options = { "Next", "Generate", "Exit" };
-            StartMenu startMenu = new StartMenu(options, "Map");
+            string[] startOptions = { "Next", "Generate", "Battle", "Exit" };
+            StartMenu startMenu = new StartMenu(startOptions);
+            UserInterface ui = new UserInterface("Map", "", startMenu);
             int selectedIndex = startMenu.Run();
+
             switch (selectedIndex)
             {
                 case 0:
-                    Console.Clear();
-                    LoadMapLevel();
+                    ui.UpdateUi(LoadMapLevel(), " Use arrows keys to walk", ui.Menu);
                     Console.ReadKey(true);
                     RunTheGame();
 
 
                     break;
                 case 1:
-                    Generate();
-                    Console.Clear();
-                    LoadMapLevel();
+                    ui.UpdateUi(Generate(), " Use arrows keys to walk", ui.Menu);
                     Console.ReadKey(true);
                     RunTheGame();
                     break;
                 case 2:
+                    Battle b = new Battle();
+                    b.Begin();
+                    break;
+                case 3:
                     ExitGame();
                     break;
 
@@ -100,22 +103,21 @@ Use the arrow keys to choose options and press enter to select one";
 
             Console.ReadKey(true);
         }
-        private void LoadMapLevel()
+        
+        private string LoadMapLevel()
         {
             MapLevel newLevel = new MapLevel();
             string level = newLevel.MapText();
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(level);
-
+            return level;
         }
-        private void Generate()
+        
+        private string Generate()
         {
+            string map = string.Empty;
             for (int i = 0; i < 101; i++)
-                LoadMapLevel();
-
+                map = LoadMapLevel();
+            return map;
         }
-
-
     }
-
 }

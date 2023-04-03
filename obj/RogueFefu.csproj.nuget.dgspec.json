@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\1\\source\\repos\\RogueFefu\\RogueFefu\\RogueFefu.csproj": {}
+    "C:\\repos\\roguelike_console_game\\RogueFefu.csproj": {}
   },
   "projects": {
-    "C:\\Users\\1\\source\\repos\\RogueFefu\\RogueFefu\\RogueFefu.csproj": {
+    "C:\\repos\\roguelike_console_game\\RogueFefu.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\1\\source\\repos\\RogueFefu\\RogueFefu\\RogueFefu.csproj",
+        "projectUniqueName": "C:\\repos\\roguelike_console_game\\RogueFefu.csproj",
         "projectName": "RogueFefu",
-        "projectPath": "C:\\Users\\1\\source\\repos\\RogueFefu\\RogueFefu\\RogueFefu.csproj",
-        "packagesPath": "C:\\Users\\1\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\1\\source\\repos\\RogueFefu\\RogueFefu\\obj\\",
+        "projectPath": "C:\\repos\\roguelike_console_game\\RogueFefu.csproj",
+        "packagesPath": "C:\\Users\\Katya\\.nuget\\packages\\",
+        "outputPath": "C:\\repos\\roguelike_console_game\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\1\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Katya\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

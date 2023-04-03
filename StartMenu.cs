@@ -10,46 +10,46 @@ namespace RogueFefu
     {
         private int SelectedIndex;
         private string[] options;
-        private string promt;
 
-        public StartMenu(string[] options, string promt)
+        public StartMenu(string[] options)
         {
             this.SelectedIndex = 0;
             this.options = options;
-            this.promt = promt;
         }
 
         private void DisplayOptions()
         {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine(promt);
-            string prefix;
-            for (int i = 0; i < options.Length; i++)
+            if (options.Length > 0)
             {
-                string CurentOption = options[i];
-                if(i == SelectedIndex)
+                Console.ForegroundColor = ConsoleColor.Green;
+                UserInterface.ConsoleWriteln("════════════════════", 81, 1);
+                UserInterface.ConsoleWriteln(" GAME MENU:", 81, 2);
+                UserInterface.ConsoleWriteln("════════════════════", 81, 3);
+                string prefix;
+                for (int i = 0; i < options.Length; i++)
                 {
-                    prefix = "-->";
-                    Console.ForegroundColor = ConsoleColor.DarkBlue;
-                    
+                    string CurentOption = options[i];
+                    if (i == SelectedIndex)
+                    {
+                        prefix = "-->";
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+
+                    }
+                    else
+                    {
+                        prefix = " ";
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    UserInterface.ConsoleWriteln($"{prefix}{CurentOption}   ", 81, 4 + i);
                 }
-                else
-                {
-                    prefix = " ";
-                    Console.ForegroundColor = ConsoleColor.White;
-
-                }
-
-                Console.WriteLine($"{prefix}{CurentOption} ");
-
             }
         }
+
         public int Run()
         {
             ConsoleKey keyPressed;
             do
             {
-                Console.Clear();
                 DisplayOptions();
 
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
