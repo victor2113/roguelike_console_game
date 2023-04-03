@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace RogueFefu
@@ -10,22 +12,46 @@ namespace RogueFefu
     internal class Game
     {
 
-
-
         public void Begin()
         {
             Console.CursorVisible = false;
-            string promt = @"
-  ______    __             _                                    
- |  ____|  / _|           | |                                   
- | |__ ___| |_ _   _    __| |_   _ _ __   __ _  ___  ___  _ __  
- |  __/ _ \  _| | | |  / _` | | | | '_ \ / _` |/ _ \/ _ \| '_ \ 
- | | |  __/ | | |_| | | (_| | |_| | | | | (_| |  __/ (_) | | | |
- |_|  \___|_|  \__,_|  \__,_|\__,_|_| |_|\__, |\___|\___/|_| |_|
-                                          __/ |                 
-                                         |___/ RogueLike game project
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
 
+            Console.WriteLine("╔════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                                                    ║");
+            Console.WriteLine("║          ██╗  ██╗███████╗██████╗  ██████╗          ║");
+            Console.WriteLine("║          ██║  ██║██╔════╝██╔══██╗██╔═══██╗         ║");
+            Console.WriteLine("║          ███████║█████╗  ██████╔╝██║   ██║         ║");
+            Console.WriteLine("║          ██╔══██║██╔══╝  ██╔══██╗██║   ██║         ║");
+            Console.WriteLine("║          ██║  ██║███████╗██║  ██║╚██████╔╝         ║");
+            Console.WriteLine("║          ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝          ║");
+            Console.WriteLine("║                                                    ║");
+            Console.WriteLine("║            Please, enter your player name          ║");
+            Console.WriteLine("║                                                    ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════╝");
+            Console.WriteLine("Name: ");
 
+            string playerName = Console.ReadLine();
+            Player player = new Player(playerName);
+
+            string promt = $@"
+
+██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗    ████████╗ ██████╗                 
+██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝    ╚══██╔══╝██╔═══██╗                
+██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗         ██║   ██║   ██║                
+██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝         ██║   ██║   ██║                
+╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗       ██║   ╚██████╔╝                
+ ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝       ╚═╝    ╚═════╝                 
+                                                                                                    
+███████╗███████╗███████╗██╗   ██╗    ██████╗ ██╗   ██╗███╗   ██╗ ██████╗ ███████╗ ██████╗ ███╗   ██╗
+██╔════╝██╔════╝██╔════╝██║   ██║    ██╔══██╗██║   ██║████╗  ██║██╔════╝ ██╔════╝██╔═══██╗████╗  ██║
+█████╗  █████╗  █████╗  ██║   ██║    ██║  ██║██║   ██║██╔██╗ ██║██║  ███╗█████╗  ██║   ██║██╔██╗ ██║
+██╔══╝  ██╔══╝  ██╔══╝  ██║   ██║    ██║  ██║██║   ██║██║╚██╗██║██║   ██║██╔══╝  ██║   ██║██║╚██╗██║
+██║     ███████╗██║     ╚██████╔╝    ██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝███████╗╚██████╔╝██║ ╚████║
+╚═╝     ╚══════╝╚═╝      ╚═════╝     ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝
+                                                                              RogueLike game project
+
+Hello, {player.PlayerName}! Let's start the game!
 Use the arrow keys to choose options and press enter to select one";
 
 
@@ -55,6 +81,7 @@ Use the arrow keys to choose options and press enter to select one";
             Console.ReadKey(true);
 
         }
+
         private void ExitGame()
         {
             Console.Clear();
@@ -114,7 +141,6 @@ Use the arrow keys to choose options and press enter to select one";
                 LoadMapLevel();
 
         }
-
 
     }
 
