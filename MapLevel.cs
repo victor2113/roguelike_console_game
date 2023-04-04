@@ -18,12 +18,12 @@ namespace RogueFefu
             West = -2
         }
 
-
+       
         private Dictionary<MapSpace, Direction> deadEnds =
             new Dictionary<MapSpace, Direction>();
 
-
-        private const char HORIZONTAL = '═';
+       
+        private const char HORIZONTAL = '═';        
         private const char VERTICAL = '║';
         private const char CORNER_NW = '╔';
         private const char CORNER_SE = '╝';
@@ -36,23 +36,23 @@ namespace RogueFefu
         public const char GOLD = '*';
         public const char ENEMY = 'E';
         private const char EMPTY = ' ';
-        private const int REGION_WD = 26;
+        private const int REGION_WD = 26;          
         private const int REGION_HT = 8;
-        private const int MAP_WD = 78;
+        private const int MAP_WD = 78;              
         private const int MAP_HT = 24;
-        private const int MAX_ROOM_WT = 24;
-        private const int MAX_ROOM_HT = 6;
-        private const int MIN_ROOM_WT = 4;
+        private const int MAX_ROOM_WT = 24;         
+        private const int MAX_ROOM_HT = 6;          
+        private const int MIN_ROOM_WT = 4;          
         private const int MIN_ROOM_HT = 4;
-        private const int ROOM_CREATE_PCT = 90;
-        private const int ROOM_EXIT_PCT = 90;
+        private const int ROOM_CREATE_PCT = 90;       
+        private const int ROOM_EXIT_PCT = 90;       
         private const int ROOM_GOLD_PCT = 50;
         private const int ROOM_ENEMY_PCT = 80;
 
 
         private MapSpace[,] levelMap = new MapSpace[80, 25];
 
-
+        
         private static Random rand = new Random();
 
         public MapSpace[,] LevelMap
@@ -62,7 +62,7 @@ namespace RogueFefu
 
         public MapLevel()
         {
-
+            
             MapGeneration();
 
             while (!VerifyMap())
@@ -74,7 +74,7 @@ namespace RogueFefu
 
         private bool VerifyMap()
         {
-
+           
 
             bool retValue = true;
             List<char> dirCheck = new List<char>();
@@ -91,7 +91,7 @@ namespace RogueFefu
                 if (!retValue) { break; }
             }
 
-
+           
 
             if (retValue)
             {
@@ -113,10 +113,10 @@ namespace RogueFefu
 
         private void MapGeneration()
         {
-
+            
             int roomWidth = 0, roomHeight = 0, roomAnchorX = 0, roomAnchorY = 0;
 
-
+           
             levelMap = new MapSpace[80, 25];
 
             for (int y = 1; y < 18; y += REGION_HT)
@@ -128,7 +128,7 @@ namespace RogueFefu
                         roomHeight = rand.Next(MIN_ROOM_HT, MAX_ROOM_HT + 1);
                         roomWidth = rand.Next(MIN_ROOM_WT, MAX_ROOM_WT + 1);
 
-
+                       
                         roomAnchorY = (int)((REGION_HT - roomHeight) / 2) + y;
                         roomAnchorX = (int)((REGION_WD - roomWidth) / 2) + x;
 
@@ -146,14 +146,14 @@ namespace RogueFefu
                 }
             }
 
-
+            
             HallwayGeneration();
             AddStairway();
         }
 
         private void AddStairway()
         {
-
+           
             int x = 1; int y = 1;
 
             while (levelMap[x, y].MapCharacter != ROOM_INT)
@@ -167,14 +167,14 @@ namespace RogueFefu
 
         private void RoomGeneration(int westWallX, int northWallY, int roomWidth, int roomHeight)
         {
-
+            
 
             int eastWallX = westWallX + roomWidth;
-            int southWallY = northWallY + roomHeight;
+            int southWallY = northWallY + roomHeight;      
 
 
             int regionNumber = GetRegionNumber(westWallX, northWallY);
-            int doorway = 0, doorCount = 0, goldX, goldY, enemyX, enemyY;
+            int doorway = 0, doorCount = 0, goldX, goldY,enemyX , enemyY;
 
 
 
@@ -207,7 +207,7 @@ namespace RogueFefu
                     doorCount++;
                 }
 
-                if (regionNumber <= 6 && rand.Next(101) <= ROOM_EXIT_PCT)
+                if (regionNumber <= 6 && rand.Next(101) <= ROOM_EXIT_PCT) 
                 {
                     doorway = rand.Next(westWallX + 1, eastWallX);
                     levelMap[doorway, southWallY] = new MapSpace(ROOM_DOOR, false, false, doorway, southWallY);
@@ -235,7 +235,7 @@ namespace RogueFefu
                 }
             }
 
-
+           
 
             levelMap[westWallX, northWallY] = new MapSpace(CORNER_NW, false, false, westWallX, northWallY);
             levelMap[eastWallX, northWallY] = new MapSpace(CORNER_NE, false, false, eastWallX, northWallY);
@@ -246,7 +246,7 @@ namespace RogueFefu
             if (rand.Next(1, 101) > ROOM_GOLD_PCT)
             {
                 goldX = westWallX; goldY = northWallY;
-
+              
                 while (levelMap[goldX, goldY].MapCharacter != ROOM_INT)
                 {
                     goldX = rand.Next(westWallX + 1, eastWallX);
@@ -271,12 +271,12 @@ namespace RogueFefu
 
         private void HallwayGeneration()
         {
-
+           
             Direction hallDirection = Direction.None; Direction direction90; Direction direction270;
             MapSpace hallwaySpace, newSpace;
             Dictionary<Direction, MapSpace> adjacentChars = new Dictionary<Direction, MapSpace>();
             Dictionary<Direction, MapSpace> surroundingChars = new Dictionary<Direction, MapSpace>();
-
+            
             for (int i = deadEnds.Count - 1; i >= 0; i--)
             {
                 hallwaySpace = deadEnds.ElementAt(i).Key;
@@ -287,7 +287,7 @@ namespace RogueFefu
 
             while (deadEnds.Count > 0)
             {
-
+               
                 for (int i = deadEnds.Count - 1; i >= 0; i--)
                 {
                     hallwaySpace = deadEnds.ElementAt(i).Key;
@@ -298,20 +298,20 @@ namespace RogueFefu
 
                 for (int i = deadEnds.Count - 1; i >= 0; i--)
                 {
-
+                    
                     hallwaySpace = deadEnds.ElementAt(i).Key;
                     hallDirection = deadEnds.ElementAt(i).Value;
                     direction90 = GetDirection90(hallDirection);
                     direction270 = GetDirection270(hallDirection);
 
-
+                    
                     if (hallDirection != Direction.None)
                     {
                         surroundingChars = SearchAllDirections(hallwaySpace.X, hallwaySpace.Y);
 
                         switch (true)
                         {
-
+            
                             case true when (surroundingChars[hallDirection] != null &&
                                     surroundingChars[hallDirection].MapCharacter == HALLWAY):
 
@@ -319,7 +319,7 @@ namespace RogueFefu
                                 deadEnds.Remove(hallwaySpace);
 
                                 break;
-
+                           
                             case true when (surroundingChars[direction90] != null &&
                                     surroundingChars[direction90].MapCharacter == HALLWAY):
 
@@ -327,7 +327,7 @@ namespace RogueFefu
                                 deadEnds.Remove(hallwaySpace);
 
                                 break;
-
+                            
                             case true when (surroundingChars[direction270] != null &&
                                     surroundingChars[direction270].MapCharacter == HALLWAY):
 
@@ -336,7 +336,7 @@ namespace RogueFefu
 
                                 break;
                             default:
-
+                               
                                 adjacentChars = SearchAdjacent(EMPTY, hallwaySpace.X, hallwaySpace.Y);
                                 if (adjacentChars.ContainsKey(hallDirection))
                                 {
@@ -367,7 +367,7 @@ namespace RogueFefu
                         deadEnds.Remove(hallwaySpace);
                     }
 
-
+                    
                 }
             }
         }
@@ -375,7 +375,7 @@ namespace RogueFefu
         private void DrawHallway(MapSpace start, MapSpace end, Direction hallDirection)
         {
 
-
+           
 
             switch (hallDirection)
             {
@@ -416,14 +416,14 @@ namespace RogueFefu
 
         private Direction GetDirection90(Direction startingDirection)
         {
-
+            
             Direction retValue = (Math.Abs((int)startingDirection) == 1) ? (Direction)2 : (Direction)1;
             return retValue;
         }
 
         private Direction GetDirection270(Direction startingDirection)
         {
-
+            
             Direction retValue = (Math.Abs((int)startingDirection) == 1) ? (Direction)2 : (Direction)1;
             retValue = (Direction)((int)retValue * -1);
             return retValue;
@@ -432,8 +432,26 @@ namespace RogueFefu
         public Dictionary<Direction, MapSpace> SearchAdjacent(char character, int x, int y)
         {
 
+            
 
+            Dictionary<Direction, MapSpace> retValue = new Dictionary<Direction, MapSpace>();
 
+            if (y - 1 >= 0 && levelMap[x, y - 1].MapCharacter == character) 
+                retValue.Add(Direction.North, levelMap[x, y - 1]);
+
+            if (x + 1 <= MAP_WD && levelMap[x + 1, y].MapCharacter == character) 
+                retValue.Add(Direction.East, levelMap[x + 1, y]);
+
+            if (y + 1 <= MAP_HT && levelMap[x, y + 1].MapCharacter == character)  
+                retValue.Add(Direction.South, levelMap[x, y + 1]);
+
+            if ((x - 1) >= 0 && levelMap[x - 1, y].MapCharacter == character) 
+                retValue.Add(Direction.West, levelMap[x - 1, y]);
+
+            return retValue;
+        }
+        public bool SearchAdjacentBool(char character, int x, int y)
+        {
             Dictionary<Direction, MapSpace> retValue = new Dictionary<Direction, MapSpace>();
 
             if (y - 1 >= 0 && levelMap[x, y - 1].MapCharacter == character)
@@ -448,12 +466,13 @@ namespace RogueFefu
             if ((x - 1) >= 0 && levelMap[x - 1, y].MapCharacter == character)
                 retValue.Add(Direction.West, levelMap[x - 1, y]);
 
-            return retValue;
+            if(retValue.Count > 0) return true;
+            else return false;  
         }
 
         public Dictionary<Direction, MapSpace> SearchAdjacent(int x, int y)
         {
-
+            
 
             Dictionary<Direction, MapSpace> retValue = new Dictionary<Direction, MapSpace>();
             retValue.Add(Direction.North, levelMap[x, y - 1]);
@@ -466,7 +485,7 @@ namespace RogueFefu
 
         public Dictionary<Direction, MapSpace> SearchAllDirections(int currentX, int currentY)
         {
-
+           
             Dictionary<Direction, MapSpace> retValue = new Dictionary<Direction, MapSpace>();
 
             retValue.Add(Direction.North, SearchDirection(Direction.North, currentX, currentY - 1));
@@ -479,7 +498,7 @@ namespace RogueFefu
 
         public MapSpace SearchDirection(Direction direction, int startX, int startY)
         {
-
+           
             int currentX = startX, currentY = startY;
             MapSpace? retValue = null;
 
@@ -516,7 +535,7 @@ namespace RogueFefu
 
         public MapSpace PlaceMapCharacter(char MapChar, bool Living)
         {
-
+          
 
             Random random = new Random();
             int xPos = 1, yPos = 1;
@@ -529,7 +548,7 @@ namespace RogueFefu
                 yPos = rand.Next(1, MAP_HT);
             }
 
-
+           
             if (Living)
                 levelMap[xPos, yPos].DisplayCharacter = MapChar;
             else
@@ -540,7 +559,7 @@ namespace RogueFefu
 
         public MapSpace MoveDisplayItem(MapSpace Start, MapSpace Destination)
         {
-
+           
             levelMap[Destination.X, Destination.Y].DisplayCharacter = Start.DisplayCharacter;
             levelMap[Start.X, Start.Y].DisplayCharacter = null;
 
@@ -549,7 +568,7 @@ namespace RogueFefu
 
         public int GetRegionNumber(int RoomAnchorX, int RoomAnchorY)
         {
-
+            
 
             int returnVal;
 
@@ -563,10 +582,10 @@ namespace RogueFefu
 
         public string MapText()
         {
-
+            
             StringBuilder sbReturn = new StringBuilder();
 
-
+           
 
             for (int y = 0; y <= MAP_HT; y++)
             {
@@ -582,10 +601,10 @@ namespace RogueFefu
                     }
                     else
                     {
-
+                       
                         sbReturn.Append(' ');
                     }
-                sbReturn.Append("\n");
+                sbReturn.Append("\n");        
             }
 
             return sbReturn.ToString();
@@ -595,17 +614,17 @@ namespace RogueFefu
 
     internal class MapSpace
     {
-        public char MapCharacter { get; set; }
-        public char? ItemCharacter { get; set; }
-        public char? DisplayCharacter { get; set; }
-        public bool SearchRequired { get; set; }
-        public bool Visible { get; set; }
+        public char MapCharacter { get; set; } 
+        public char? ItemCharacter { get; set; } 
+        public char? DisplayCharacter { get; set; } 
+        public bool SearchRequired { get; set; }  
+        public bool Visible { get; set; } 
         public int X { get; set; }
         public int Y { get; set; }
 
         public MapSpace()
         {
-
+            
             this.MapCharacter = ' ';
             this.ItemCharacter = null;
             this.DisplayCharacter = null;
@@ -626,7 +645,7 @@ namespace RogueFefu
 
         public MapSpace(char mapChar, int X, int Y)
         {
-
+            
             this.MapCharacter = mapChar;
             this.ItemCharacter = null;
             this.DisplayCharacter = null;
@@ -650,13 +669,13 @@ namespace RogueFefu
 }
 
 
+        
+        
 
+       
 
+    
+    
 
-
-
-
-
-
-
+    
 
