@@ -450,6 +450,25 @@ namespace RogueFefu
 
             return retValue;
         }
+        public bool SearchAdjacentBool(char character, int x, int y)
+        {
+            Dictionary<Direction, MapSpace> retValue = new Dictionary<Direction, MapSpace>();
+
+            if (y - 1 >= 0 && levelMap[x, y - 1].MapCharacter == character)
+                retValue.Add(Direction.North, levelMap[x, y - 1]);
+
+            if (x + 1 <= MAP_WD && levelMap[x + 1, y].MapCharacter == character)
+                retValue.Add(Direction.East, levelMap[x + 1, y]);
+
+            if (y + 1 <= MAP_HT && levelMap[x, y + 1].MapCharacter == character)
+                retValue.Add(Direction.South, levelMap[x, y + 1]);
+
+            if ((x - 1) >= 0 && levelMap[x - 1, y].MapCharacter == character)
+                retValue.Add(Direction.West, levelMap[x - 1, y]);
+
+            if(retValue.Count > 0) return true;
+            else return false;  
+        }
 
         public Dictionary<Direction, MapSpace> SearchAdjacent(int x, int y)
         {

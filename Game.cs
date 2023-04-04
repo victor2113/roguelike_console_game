@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics;
 
 namespace RogueFefu
 {
@@ -107,14 +108,11 @@ Use the arrow keys to choose options and press enter to select one";
             Console.ReadKey(true);
             Begin();
         }
- 
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
         private void LoadMapLevel()
         {
             string level = this.CurrentMap.MapText();
@@ -123,7 +121,7 @@ Use the arrow keys to choose options and press enter to select one";
         }
 
         
-
+       
 
 
 
@@ -201,23 +199,29 @@ Use the arrow keys to choose options and press enter to select one";
 
         public void MoveCharacter(Player player, MapLevel.Direction direct)
         {
-            // Move character if possible.
-
-            // List of characters a living character can move onto.
+          
             List<char> charsAllowed =
                 new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,
-                MapLevel.ROOM_DOOR, MapLevel.HALLWAY};
+                MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.ENEMY};
+            List<char?> charsEvent = new List<char?>(){MapLevel.ENEMY}; ;
 
-            // Set surrounding characters
+
             Dictionary<MapLevel.Direction, MapSpace> surrounding =
                 CurrentMap.SearchAdjacent(player.Location.X, player.Location.Y);
 
-            // If the map character in the chosen direction is habitable 
-            // and if there's no monster there,move the character there.
-            
+            if (charsEvent.Contains(surrounding[direct].ItemCharacter))
+            {
+                Console.WriteLine("fight!");
+                player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
+            }
+
+
             if (charsAllowed.Contains(surrounding[direct].MapCharacter) &&
                 surrounding[direct].DisplayCharacter == null)
-                    player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
+            {
+                player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
+            }
+                    
 
         }
     }
