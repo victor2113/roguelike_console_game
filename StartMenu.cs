@@ -22,9 +22,9 @@ namespace RogueFefu
             if (options.Length > 0)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                UserInterface.ConsoleWriteln("════════════════════", 81, 1);
-                UserInterface.ConsoleWriteln(" GAME MENU:", 81, 2);
-                UserInterface.ConsoleWriteln("════════════════════", 81, 3);
+                UserInterface.ConsoleWriteln("═════════════════", UserInterface.MapWidth, 2);
+                UserInterface.ConsoleWriteln(" GAME MENU:", UserInterface.MapWidth, 3);
+                UserInterface.ConsoleWriteln("═════════════════", UserInterface.MapWidth, 4);
                 string prefix;
                 for (int i = 0; i < options.Length; i++)
                 {
@@ -40,7 +40,7 @@ namespace RogueFefu
                         prefix = " ";
                         Console.ForegroundColor = ConsoleColor.White;
                     }
-                    UserInterface.ConsoleWriteln($"{prefix}{CurentOption}   ", 81, 4 + i);
+                    UserInterface.ConsoleWriteln($"{prefix}{CurentOption}   ", UserInterface.MapWidth, 6 + i);
                 }
             }
         }

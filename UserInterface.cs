@@ -35,15 +35,15 @@
         private void WriteStatus(string s)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            ConsoleWriteln("╔══════════════════════════════════════════════════════════════════════════════╗", 0, MapHeight + 1);
+            ConsoleWriteln($"╔{new string('═', MapWidth - 2)}╗", 0, MapHeight + 1);
             ConsoleWriteln($"║ {s}{new string(' ', MapWidth - s.Length - 3)}║", 0, MapHeight + 2);
-            ConsoleWriteln("╚══════════════════════════════════════════════════════════════════════════════╝", 0, MapHeight + 3);
+            ConsoleWriteln($"╚{new string('═', MapWidth - 2)}╝", 0, MapHeight + 3);
         }
 
         public string Map;
         public string Status;
         public StartMenu Menu;
-        private const int MapWidth = 80;
-        private const int MapHeight = 25;
+        public const int MapWidth = 101;
+        public const int MapHeight = 25;
     }
 }

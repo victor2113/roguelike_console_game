@@ -10,38 +10,68 @@ namespace RogueFefu
     internal class Game
     {
 
-        public string GameLogo = @"
-  ______    __             _                                    
- |  ____|  / _|           | |                                   
- | |__ ___| |_ _   _    __| |_   _ _ __   __ _  ___  ___  _ __  
- |  __/ _ \  _| | | |  / _` | | | | '_ \ / _` |/ _ \/ _ \| '_ \ 
- | | |  __/ | | |_| | | (_| | |_| | | | | (_| |  __/ (_) | | | |
- |_|  \___|_|  \__,_|  \__,_|\__,_|_| |_|\__, |\___|\___/|_| |_|
-                                          __/ |                 
-                                         |___/ RogueLike game project
+        private const int ARROWUP = 0;
+        private const int ARROWDOWN = 1;
+        private const int ARROWLEFT = 2;
+        private const int ARROWRIGHT = 3;
+        private const int ESCAPE = 4;
 
 
+
+        private bool GameOver = false;
+        private int ButtonPressed;
+
+        public MapLevel CurrentMap { get; set; }
+        public int CurrentLevel { get; set; }
+        public Player CurrentPlayer { get; }
+        public int CurrentTurn { get; set; }
+
+        public const string GameLogo = @"
+                                                                                                                 
+███████╗███████╗███████╗██╗   ██╗    ██████╗ ██╗   ██╗███╗   ██╗ ██████╗ ███████╗ ██████╗ ███╗   ██╗             
+██╔════╝██╔════╝██╔════╝██║   ██║    ██╔══██╗██║   ██║████╗  ██║██╔════╝ ██╔════╝██╔═══██╗████╗  ██║             
+█████╗  █████╗  █████╗  ██║   ██║    ██║  ██║██║   ██║██╔██╗ ██║██║  ███╗█████╗  ██║   ██║██╔██╗ ██║             
+██╔══╝  ██╔══╝  ██╔══╝  ██║   ██║    ██║  ██║██║   ██║██║╚██╗██║██║   ██║██╔══╝  ██║   ██║██║╚██╗██║             
+██║     ███████╗██║     ╚██████╔╝    ██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝███████╗╚██████╔╝██║ ╚████║             
+╚═╝     ╚══════╝╚═╝      ╚═════╝     ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝   
+                                                                              RogueLike game project
 ";
 
+        public Game()
+        {
+            string PlayerName = "Tolya";
+            this.CurrentLevel = 1;
+            this.CurrentMap = new MapLevel();
+            this.CurrentPlayer = new Player(PlayerName);
+            this.CurrentPlayer.Location = CurrentMap.PlaceMapCharacter(Player.CHARACTER, true);
+        }
+
+
+        public Game(string PlayerName)
+        {
+            this.CurrentLevel = 1;
+            this.CurrentMap = new MapLevel();
+            this.CurrentPlayer = new Player(PlayerName);
+            this.CurrentPlayer.Location = CurrentMap.PlaceMapCharacter(Player.CHARACTER, true);
+        }
 
         public void Begin()
         {
+            string logo = $"{GameLogo}\n\n" + $"Hello, {this.CurrentPlayer.PlayerName}! Let's start the game!";
+
             Console.CursorVisible = false;
-
-
-
             string[] options = { "Start", "About", "Exit" };
             StartMenu startMenu = new StartMenu(options);
-            UserInterface ui = new UserInterface(GameLogo, "Use the arrow keys to choose options and press enter to select one", startMenu);
+            UserInterface ui = new UserInterface(logo, "Use the arrow keys to choose options and press enter to select one", startMenu);
             int selectedIndex = startMenu.Run();
 
-            
+
 
 
             switch (selectedIndex)
             {
                 case 0:
-                    RunTheGame();
+                    LoadmapAndPlay();
                     break;
                 case 1:
                     AboutGameText();
@@ -69,55 +99,101 @@ namespace RogueFefu
             Begin();
         }
 
-        private void RunTheGame()
-        {
-            string[] startOptions = { "Next", "Generate", "Battle", "Exit" };
-            StartMenu startMenu = new StartMenu(startOptions);
-            UserInterface ui = new UserInterface("Map", "", startMenu);
-            int selectedIndex = startMenu.Run();
-
-            switch (selectedIndex)
-            {
-                case 0:
-                    ui.UpdateUi(LoadMapLevel(), " Use arrows keys to walk", ui.Menu);
-                    Console.ReadKey(true);
-                    RunTheGame();
-
-
-                    break;
-                case 1:
-                    ui.UpdateUi(Generate(), " Use arrows keys to walk", ui.Menu);
-                    Console.ReadKey(true);
-                    RunTheGame();
-                    break;
-                case 2:
-                    Battle b = new Battle();
-                    b.Begin();
-                    break;
-                case 3:
-                    ExitGame();
-                    break;
-
-
-            }
-
-            Console.ReadKey(true);
-        }
         
         private string LoadMapLevel()
         {
-            MapLevel newLevel = new MapLevel();
-            string level = newLevel.MapText();
-            Console.ForegroundColor = ConsoleColor.White;
-            return level;
+            string level = this.CurrentMap.MapText();
+            Console.ForegroundColor = ConsoleColor.Gray;
+            return level;        
         }
-        
-        private string Generate()
+
+        void LoadmapAndPlay()
         {
-            string map = string.Empty;
-            for (int i = 0; i < 101; i++)
-                map = LoadMapLevel();
-            return map;
+            //Console.Clear();
+            UserInterface ui = new UserInterface(LoadMapLevel(), "Use arrows keys to walk", null!);
+            do
+            {
+                int key = ReadKeyPressedByPlayer();
+                switch (key)
+                {
+                    case ARROWUP:
+                        MoveCharacter(CurrentPlayer, MapLevel.Direction.North);
+                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk", ui.Menu);
+                        break;
+                    case ARROWDOWN:
+                        MoveCharacter(CurrentPlayer, MapLevel.Direction.South);
+                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk", ui.Menu);
+                        break;
+                    case ARROWLEFT:
+                        MoveCharacter(CurrentPlayer, MapLevel.Direction.West);
+                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk", ui.Menu);
+                        break;
+                    case ARROWRIGHT:
+                        MoveCharacter(CurrentPlayer, MapLevel.Direction.East);
+                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk", ui.Menu);
+                        break;
+                    case ESCAPE:
+                        ExitGame();
+                        break;
+                }
+            } while (!GameOver);
+    }
+
+         
+
+
+
+        private int ReadKeyPressedByPlayer()
+        {
+            ConsoleKey keyPressed;
+           
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                keyPressed = keyInfo.Key;
+
+                if (keyPressed == ConsoleKey.UpArrow)
+                {
+                    ButtonPressed = 0;
+                  
+                }
+                else if (keyPressed == ConsoleKey.DownArrow)
+                {
+                    ButtonPressed = 1 ;
+                }
+                else if (keyPressed == ConsoleKey.LeftArrow)
+                {
+                    ButtonPressed = 2;
+                }
+                else if (keyPressed == ConsoleKey.RightArrow)
+                {
+                    ButtonPressed = 3;
+                }
+            else if (keyPressed == ConsoleKey.Escape)
+            {
+                ButtonPressed = 4;
+            }
+            return ButtonPressed;
+        }
+
+        public void MoveCharacter(Player player, MapLevel.Direction direct)
+        {
+            // Move character if possible.
+
+            // List of characters a living character can move onto.
+            List<char> charsAllowed =
+                new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,
+                MapLevel.ROOM_DOOR, MapLevel.HALLWAY};
+
+            // Set surrounding characters
+            Dictionary<MapLevel.Direction, MapSpace> surrounding =
+                CurrentMap.SearchAdjacent(player.Location.X, player.Location.Y);
+
+            // If the map character in the chosen direction is habitable 
+            // and if there's no monster there,move the character there.
+            
+            if (charsAllowed.Contains(surrounding[direct].MapCharacter) &&
+                surrounding[direct].DisplayCharacter == null)
+                    player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
+
         }
     }
 }
