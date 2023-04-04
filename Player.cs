@@ -27,7 +27,6 @@ namespace RogueFefu
 
         public Player(string PlayerName)
         {
-            var rand = new Random();
             this.PlayerName = PlayerName;
             this.HP = STARTING_HP;
             this.HPDamage = 0;
