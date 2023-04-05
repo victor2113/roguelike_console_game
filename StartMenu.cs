@@ -27,11 +27,11 @@ namespace RogueFefu
             for (int i = 0; i < options.Length; i++)
             {
                 string CurentOption = options[i];
-                if (i == SelectedIndex)
+                if(i == SelectedIndex)
                 {
                     prefix = "-->";
                     Console.ForegroundColor = ConsoleColor.DarkBlue;
-
+                    
                 }
                 else
                 {
@@ -58,12 +58,11 @@ namespace RogueFefu
                 if (keyPressed == ConsoleKey.UpArrow)
                 {
                     SelectedIndex--;
-                    if (SelectedIndex == -1)
+                    if(SelectedIndex == -1)
                     {
                         SelectedIndex = options.Length - 1;
                     }
-                }
-                else if (keyPressed == ConsoleKey.DownArrow)
+                }else if(keyPressed == ConsoleKey.DownArrow)
                 {
                     SelectedIndex++;
                     if (SelectedIndex == options.Length)

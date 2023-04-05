@@ -7,8 +7,26 @@ namespace RogueFefu
     {
         static void Main(string[] args)
         {
+            Console.CursorVisible = false;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
 
-            Game game = new Game();
+            Console.WriteLine("╔════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                                                    ║");
+            Console.WriteLine("║          ██╗  ██╗███████╗██████╗  ██████╗          ║");
+            Console.WriteLine("║          ██║  ██║██╔════╝██╔══██╗██╔═══██╗         ║");
+            Console.WriteLine("║          ███████║█████╗  ██████╔╝██║   ██║         ║");
+            Console.WriteLine("║          ██╔══██║██╔══╝  ██╔══██╗██║   ██║         ║");
+            Console.WriteLine("║          ██║  ██║███████╗██║  ██║╚██████╔╝         ║");
+            Console.WriteLine("║          ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝          ║");
+            Console.WriteLine("║                                                    ║");
+            Console.WriteLine("║            Please, enter your player name          ║");
+            Console.WriteLine("║                                                    ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════╝");
+            Console.Write("Name: ");
+
+            string playerName = Console.ReadLine();
+
+            Game game = new Game(playerName);
             game.Begin();
         }
     }
