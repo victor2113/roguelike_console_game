@@ -10,10 +10,11 @@ namespace RogueFefu
 {
     internal class Battle
     {
-        public void Begin()
+        public bool BattleOver;
+        public void Begin(Player player, Enemy enemy)
         {
             Console.CursorVisible = false;
-            string[] enemy = { @"
+            string[] enemies = { @"
 ╔═════════════════════════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                                         ║
 ║                                                                                                         ║
@@ -60,7 +61,7 @@ namespace RogueFefu
 ║                                                                                                         ║
 ║                                                                                                         ║
 ║                                                                                                         ║
-║                                                                                                         ║
+║                   (^_^)                                                                                 ║
 ║                                                                                                         ║
 ║                                                                                                         ║
 ║                                                                                                         ║
@@ -80,7 +81,7 @@ namespace RogueFefu
 ║                                                                                                         ║
 ║                                                                                                         ║
 ║                                                                                                         ║
-║                                                                                                         ║
+║                   (^_^)                                                                                 ║
 ║                                                                                                         ║
 ║                                                      O                                                  ║
 ║                                                     _|_                                                 ║
@@ -101,7 +102,7 @@ namespace RogueFefu
 ║                                                                                                         ║
 ║                                                                                                         ║
 ║                                                                                                         ║
-║                                                                                                         ║
+║                   (^_^)                                                                                 ║
 ║                                                                                                         ║
 ║                                                                                                         ║
 ║                                                                                                         ║
@@ -121,7 +122,7 @@ namespace RogueFefu
 ║                                                                                                         ║
 ║                                                                                                         ║
 ║                                                                                                         ║
-║                                                                                                         ║
+║                   (^_^)                                                                                 ║
 ║                                                                                                         ║
 ║                                                                                                         ║
 ║                                                                                                         ║
@@ -135,46 +136,66 @@ namespace RogueFefu
 ║                                                  /_)   (_\                                              ║
 ╚═════════════════════════════════════════════════════════════════════════════════════════════════════════╝" };
 
-            string promt = enemy[new Random().Next(0, enemy.Length)];
-
+            string promt = enemies[new Random().Next(0, enemies.Length)];
             string[] options = { "Attack", "Defend", "Run away" };
-            StartMenu startMenu = new StartMenu(options, promt);
-            int selectedIndex = startMenu.Run();
-
-            switch (selectedIndex)
+            StartMenu BattleMenu = new StartMenu(options, promt);
+            int selectedIndex = BattleMenu.Run();
+            do
             {
-                case 0:
-                    Attacked();
-                    break;
-                case 1:
-                    Defended();
-                    break;
-                case 2:
-                    RunAway();
-                    break;
+                switch (selectedIndex)
+                {
+                    case 0:
+                        Attack(player, enemy);
+                        break;
+                    case 1:
+                        Defend(player, enemy);
+                        break;
+                    case 2:
+                        RunAway();
+                        break;
+                }
+            } while (!BattleOver);
+            Console.ReadKey(true);
+        }
+        private void Attack(Player player, Enemy enemy)
+        {;
+            Console.WriteLine("You've attacked the enemy");
+            player.HP = player.HP - enemy.Strength;
+            enemy.HP = enemy.HP - player.Strength;
+            if (player.HP <= 0)
+            {
+                Console.WriteLine(@"
+
+   _________    __  _________   ____ _    ____________ 
+  / ____/   |  /  |/  / ____/  / __ \ |  / / ____/ __ \
+ / / __/ /| | / /|_/ / __/    / / / / | / / __/ / /_/ /
+/ /_/ / ___ |/ /  / / /___   / /_/ /| |/ / /___/ _, _/ 
+\____/_/  |_/_/  /_/_____/   \____/ |___/_____/_/ |_|  
+                                                       
+");
+                BattleOver = true;
             }
-
+            if (enemy.HP <= 0)
+            {
+                Console.WriteLine("You won!");
+                BattleOver = true;
+            }
+            if (BattleOver != true)
+            {
+                Console.WriteLine("Your HP: " + player.HP);
+                Console.WriteLine("Enemy HP: " + enemy.HP);
+            }
             Console.ReadKey(true);
-
         }
-
-        private void Attacked()
+        private void Defend(Player player, Enemy enemy)
         {
-            Console.WriteLine("\nYou attacked the enemy");
+            Console.WriteLine("\nYou've used a shield");
             Console.ReadKey(true);
-            Environment.Exit(0);
-        }
-        private void Defended()
-        {
-            Console.WriteLine("\nYou used a shield");
-            Console.ReadKey(true);
-            Environment.Exit(0);
         }
         private void RunAway()
         {
             Console.WriteLine("\nPress any key to run away");
             Console.ReadKey(true);
-            Environment.Exit(0);
         }
     }
 }

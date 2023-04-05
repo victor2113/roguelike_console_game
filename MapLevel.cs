@@ -35,7 +35,6 @@ namespace RogueFefu
         public const char STAIRWAY = '≣';
         public const char GOLD = '*';
         public const char ENEMY = 'E';
-        public const char DEALER = 'D';
         private const char EMPTY = ' ';
         private const int REGION_WD = 26;
         private const int REGION_HT = 8;
@@ -48,8 +47,7 @@ namespace RogueFefu
         private const int ROOM_CREATE_PCT = 90;
         private const int ROOM_EXIT_PCT = 90;
         private const int ROOM_GOLD_PCT = 50;
-        private const int ROOM_ENEMY_PCT = 80;
-        private const int ROOM_DEALER_PCT = 80;
+        private const int ROOM_ENEMY_PCT = 40;
 
 
         private MapSpace[,] levelMap = new MapSpace[80, 25];
@@ -176,7 +174,7 @@ namespace RogueFefu
 
 
             int regionNumber = GetRegionNumber(westWallX, northWallY);
-            int doorway = 0, doorCount = 0, goldX, goldY, enemyX, enemyY, dealerX, dealerY;
+            int doorway = 0, doorCount = 0, goldX, goldY, enemyX, enemyY;
 
 
 
@@ -268,18 +266,6 @@ namespace RogueFefu
                 }
 
                 levelMap[enemyX, enemyY].ItemCharacter = ENEMY;
-            }
-            if (rand.Next(1, 90) > ROOM_DEALER_PCT)
-            {
-                dealerX = westWallX; dealerY = northWallY;
-
-                while (levelMap[dealerX, dealerY].MapCharacter != ROOM_INT)
-                {
-                    dealerX = rand.Next(westWallX + 1, eastWallX);
-                    dealerY = rand.Next(northWallY + 1, southWallY);
-                }
-
-                levelMap[dealerX, dealerY].ItemCharacter = DEALER;
             }
         }
 
@@ -681,14 +667,3 @@ namespace RogueFefu
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
