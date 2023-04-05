@@ -48,7 +48,9 @@ namespace RogueFefu
         private const int ROOM_EXIT_PCT = 90;
         private const int ROOM_GOLD_PCT = 50;
         private const int ROOM_ENEMY_PCT = 40;
-
+        public const int MIN_GOLD_AMT = 10;
+        public const int MAX_GOLD_AMT = 125;
+        public const char AMULET = '♀';
 
         private MapSpace[,] levelMap = new MapSpace[80, 25];
 

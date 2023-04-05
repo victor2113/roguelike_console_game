@@ -17,7 +17,7 @@ namespace RogueFefu
         private const int ARROWLEFT = 2;
         private const int ARROWRIGHT = 3;
         private const int ESCAPE = 4;
-
+        private const int MAX_LEVEL = 26;
 
 
         private bool GameOver = false;
@@ -29,6 +29,9 @@ namespace RogueFefu
         public int CurrentTurn { get; set; }
         public Battle battlelvl{ get; set; }
         public Enemy CurrentEnemy { get; set; }
+
+        private static Random rand = new Random();
+
         public Game()
         {
             string PlayerName = "Tolya";
@@ -196,6 +199,33 @@ Use the arrow keys to choose options and press enter to select one";
             return ButtonPressed;
         }
 
+        private void ChangeLevel(int Change)
+        {
+            bool allowPass = false;
+
+            if (Change < 0)
+            {
+                allowPass = CurrentPlayer.HasAmulet && CurrentLevel > 1;
+                //сообщение allowPass ? "" : "You cannot go that way.";
+            }
+
+            else if (Change > 0)
+            {
+                allowPass = CurrentLevel < MAX_LEVEL;
+                //сообщение allowPass ? "" : "You have reached the bottom level.You must go the other way.";            
+            }
+
+            if (allowPass)
+            {
+                CurrentMap = new MapLevel();
+                CurrentLevel += Change;
+                CurrentPlayer.Location = CurrentMap.PlaceMapCharacter(Player.CHARACTER, true);
+
+                if (CurrentLevel == MAX_LEVEL && !CurrentPlayer.HasAmulet)
+                    CurrentMap.PlaceMapCharacter(MapLevel.AMULET, false);
+            }
+        }
+
         public void MoveCharacter(Player player, MapLevel.Direction direct)
         {
 
@@ -222,7 +252,34 @@ Use the arrow keys to choose options and press enter to select one";
                 player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
             }
 
+            if (player.Location.ItemCharacter == MapLevel.GOLD)
+                PickUpGold();
+            else if (player.Location.ItemCharacter != null)
+                AddInventory();
 
+        }
+
+        private void PickUpGold()
+        {
+            int goldAmt = rand.Next(MapLevel.MIN_GOLD_AMT, MapLevel.MAX_GOLD_AMT);
+            CurrentPlayer.Gold += goldAmt;
+
+            CurrentPlayer.Location.ItemCharacter = null;
+            //Сообщение $"You picked up {goldAmt} pieces of gold.";
+        }
+
+        private string AddInventory()
+        {
+            string retValue = "";
+
+            if (CurrentPlayer.Location!.ItemCharacter == MapLevel.AMULET)
+            {
+                CurrentPlayer.HasAmulet = true;
+                CurrentPlayer.Location!.ItemCharacter = null;
+                //retValue = "You found the Amulet of Yendor!  It has been added to your inventory.";
+            }
+
+            return retValue;
         }
     }
 
