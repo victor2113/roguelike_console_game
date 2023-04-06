@@ -27,7 +27,7 @@ namespace RogueFefu
         public int CurrentLevel { get; set; }
         public Player CurrentPlayer { get; }
         public int CurrentTurn { get; set; }
-        public Battle battlelvl{ get; set; }
+        public Battle battlelvl { get; set; }
         public Enemy CurrentEnemy { get; set; }
 
         private static Random rand = new Random();
@@ -233,6 +233,13 @@ Use the arrow keys to choose options and press enter to select one";
                 new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,
                 MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.ENEMY};
             List<char?> charsEvent = new List<char?>() { MapLevel.ENEMY }; ;
+
+            List<char> charAllowed =
+                new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,
+                //MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.ENEMY};
+                MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.DEALER};
+            //List<char?> charsEvent = new List<char?>() { MapLevel.ENEMY };
+            List<char?> charEvent = new List<char?>() { MapLevel.DEALER };
 
 
             Dictionary<MapLevel.Direction, MapSpace> surrounding =
