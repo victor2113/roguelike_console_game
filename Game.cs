@@ -32,6 +32,17 @@ namespace RogueFefu
 
         private static Random rand = new Random();
 
+        public const string GameLogo = @"
+                                                                                                                 
+███████╗███████╗███████╗██╗   ██╗    ██████╗ ██╗   ██╗███╗   ██╗ ██████╗ ███████╗ ██████╗ ███╗   ██╗             
+██╔════╝██╔════╝██╔════╝██║   ██║    ██╔══██╗██║   ██║████╗  ██║██╔════╝ ██╔════╝██╔═══██╗████╗  ██║             
+█████╗  █████╗  █████╗  ██║   ██║    ██║  ██║██║   ██║██╔██╗ ██║██║  ███╗█████╗  ██║   ██║██╔██╗ ██║             
+██╔══╝  ██╔══╝  ██╔══╝  ██║   ██║    ██║  ██║██║   ██║██║╚██╗██║██║   ██║██╔══╝  ██║   ██║██║╚██╗██║             
+██║     ███████╗██║     ╚██████╔╝    ██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝███████╗╚██████╔╝██║ ╚████║             
+╚═╝     ╚══════╝╚═╝      ╚═════╝     ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝   
+                                                                              RogueLike game project
+";
+
         public Game()
         {
             string PlayerName = "Tolya";
@@ -52,27 +63,12 @@ namespace RogueFefu
         }
         public void Begin()
         {
+            string logo = $"{GameLogo}\n\n" + $"Hello, {this.CurrentPlayer.PlayerName}! Let's start the game!";
             Console.CursorVisible = false;
-            string promt = $@"
-                                                                                                                 
-███████╗███████╗███████╗██╗   ██╗    ██████╗ ██╗   ██╗███╗   ██╗ ██████╗ ███████╗ ██████╗ ███╗   ██╗             
-██╔════╝██╔════╝██╔════╝██║   ██║    ██╔══██╗██║   ██║████╗  ██║██╔════╝ ██╔════╝██╔═══██╗████╗  ██║             
-█████╗  █████╗  █████╗  ██║   ██║    ██║  ██║██║   ██║██╔██╗ ██║██║  ███╗█████╗  ██║   ██║██╔██╗ ██║             
-██╔══╝  ██╔══╝  ██╔══╝  ██║   ██║    ██║  ██║██║   ██║██║╚██╗██║██║   ██║██╔══╝  ██║   ██║██║╚██╗██║             
-██║     ███████╗██║     ╚██████╔╝    ██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝███████╗╚██████╔╝██║ ╚████║             
-╚═╝     ╚══════╝╚═╝      ╚═════╝     ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝   
-                                                                              RogueLike game project
-Hello, {this.CurrentPlayer.PlayerName}! Let's start the game!
-Use the arrow keys to choose options and press enter to select one";
-
-
-
             string[] options = { "Start", "About", "Exit" };
-            StartMenu startMenu = new StartMenu(options, promt);
+            StartMenu startMenu = new StartMenu(options);
+            UserInterface ui = new UserInterface(logo, "Use the arrow keys to choose options and press enter to select one", startMenu);
             int selectedIndex = startMenu.Run();
-
-
-
 
             switch (selectedIndex)
             {
@@ -85,77 +81,54 @@ Use the arrow keys to choose options and press enter to select one";
                 case 2:
                     ExitGame();
                     break;
-
-
             }
 
             Console.ReadKey(true);
-
         }
-
-
-
 
         private void ExitGame()
         {
-            Console.Clear();
-            Console.WriteLine("\nPress any key to exit....");
+            UserInterface ui = new UserInterface(GameLogo, "Press any key to exit....", null!);
             Console.ReadKey(true);
             Environment.Exit(0);
         }
         private void AboutGameText()
         {
-            Console.Clear();
-            Console.WriteLine("bla bla");
+            UserInterface ui = new UserInterface($"{GameLogo}\n\nBla bla bla", "Press any key to return", null!);
             Console.ReadKey(true);
             Begin();
         }
 
-
-
-
-
-        private void LoadMapLevel()
+        private string LoadMapLevel()
         {
             string level = this.CurrentMap.MapText();
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine(level);
+            return level;
         }
-
-
-
-
-
 
         void LoadmapAndPlay()
         {
-            Console.Clear();
-            LoadMapLevel();
+            UserInterface ui = new UserInterface(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", null!);
             do
             {
                 int key = ReadKeyPressedByPlayer();
                 switch (key)
                 {
                     case ARROWUP:
-
                         MoveCharacter(CurrentPlayer, MapLevel.Direction.North);
-                        Console.Clear();
-                        LoadMapLevel();
+                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Menu);
                         break;
                     case ARROWDOWN:
                         MoveCharacter(CurrentPlayer, MapLevel.Direction.South);
-                        Console.Clear();
-                        LoadMapLevel();
+                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Menu);
                         break;
                     case ARROWLEFT:
                         MoveCharacter(CurrentPlayer, MapLevel.Direction.West);
-                        Console.Clear();
-                        LoadMapLevel();
+                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Menu);
                         break;
                     case ARROWRIGHT:
                         MoveCharacter(CurrentPlayer, MapLevel.Direction.East);
-                        Console.Clear();
-                        LoadMapLevel();
+                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Menu);
                         break;
                     case ESCAPE:
                         ExitGame();
@@ -163,10 +136,6 @@ Use the arrow keys to choose options and press enter to select one";
                 }
             } while (!GameOver);
         }
-
-
-
-
 
         private int ReadKeyPressedByPlayer()
         {

@@ -10,28 +10,28 @@ namespace RogueFefu
     {
         private int SelectedIndex;
         private string[] options;
-        private string promt;
 
-        public StartMenu(string[] options, string promt)
+        public StartMenu(string[] options)
         {
             this.SelectedIndex = 0;
             this.options = options;
-            this.promt = promt;
         }
 
         private void DisplayOptions()
         {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine(promt);
+            Console.ForegroundColor = ConsoleColor.Green;
+            UserInterface.ConsoleWriteln("═════════════════", UserInterface.MapWidth, 2);
+            UserInterface.ConsoleWriteln(" GAME MENU:", UserInterface.MapWidth, 3);
+            UserInterface.ConsoleWriteln("═════════════════", UserInterface.MapWidth, 4);
             string prefix;
             for (int i = 0; i < options.Length; i++)
             {
                 string CurentOption = options[i];
-                if(i == SelectedIndex)
+                if (i == SelectedIndex)
                 {
                     prefix = "-->";
                     Console.ForegroundColor = ConsoleColor.DarkBlue;
-                    
+
                 }
                 else
                 {
@@ -39,9 +39,7 @@ namespace RogueFefu
                     Console.ForegroundColor = ConsoleColor.White;
 
                 }
-
-                Console.WriteLine($"{prefix}{CurentOption} ");
-
+                UserInterface.ConsoleWriteln($"{prefix}{CurentOption}   ", UserInterface.MapWidth, 6 + i);
             }
         }
         public int Run()
@@ -49,7 +47,6 @@ namespace RogueFefu
             ConsoleKey keyPressed;
             do
             {
-                Console.Clear();
                 DisplayOptions();
 
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
@@ -58,11 +55,12 @@ namespace RogueFefu
                 if (keyPressed == ConsoleKey.UpArrow)
                 {
                     SelectedIndex--;
-                    if(SelectedIndex == -1)
+                    if (SelectedIndex == -1)
                     {
                         SelectedIndex = options.Length - 1;
                     }
-                }else if(keyPressed == ConsoleKey.DownArrow)
+                }
+                else if (keyPressed == ConsoleKey.DownArrow)
                 {
                     SelectedIndex++;
                     if (SelectedIndex == options.Length)
