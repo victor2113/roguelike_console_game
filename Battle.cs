@@ -11,7 +11,6 @@ namespace RogueFefu
     internal class Battle
     {
         public string GameOver = @"
-
    _________    __  _________   ____ _    ____________ 
   / ____/   |  /  |/  / ____/  / __ \ |  / / ____/ __ \
  / / __/ /| | / /|_/ / __/    / / / / | / / __/ / /_/ /
@@ -172,7 +171,6 @@ namespace RogueFefu
 
         private void Attack(Player player, Enemy enemy, UserInterface ui)
         {
-            ;
             ui.UpdateUi(ui.Map, "You attacked the enemy", ui.Menu);
             player.HP = player.HP - enemy.Strength;
             enemy.HP = enemy.HP - player.Strength;
@@ -184,7 +182,9 @@ namespace RogueFefu
 
             if (enemy.HP <= 0)
             {
-                ui.UpdateUi(ui.Map, "You won! Press any key to continue...", ui.Menu);
+                ui.UpdateUi(ui.Map, "You won! Level up. Damage was promoted by 2 and health by 5 Press any key to continue...", ui.Menu);
+                player.Strength = player.Strength + 2;
+                player.HP = player.HP + 2;
                 BattleOver = true;
             }
 

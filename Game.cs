@@ -63,7 +63,9 @@ namespace RogueFefu
         }
         public void Begin()
         {
-            string logo = $"{GameLogo}\n\n" + $"Hello, {this.CurrentPlayer.PlayerName}! Let's start the game!";
+            string logo = $"{GameLogo}\n\n" + $"Hello, {this.CurrentPlayer.PlayerName}! Let's start the game!\n" +
+                $"Starting Hero Stats:\nHealth:{CurrentPlayer.HP}\nDamage:{CurrentPlayer.Strength}";
+
             Console.CursorVisible = false;
             string[] options = { "Start", "About", "Exit" };
             StartMenu startMenu = new StartMenu(options);
@@ -117,6 +119,7 @@ namespace RogueFefu
                     case ARROWUP:
                         MoveCharacter(CurrentPlayer, MapLevel.Direction.North);
                         ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Menu);
+
                         break;
                     case ARROWDOWN:
                         MoveCharacter(CurrentPlayer, MapLevel.Direction.South);
