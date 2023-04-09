@@ -219,9 +219,9 @@ namespace RogueFefu
 
             if (charsEvent.Contains(surrounding[direct].ItemCharacter))
             {
-                Console.WriteLine("fight!");
                 battlelvl.Begin(CurrentPlayer, CurrentEnemy);
                 player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
+                player.Location.ItemCharacter = null;
             }
 
 
