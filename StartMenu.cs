@@ -20,9 +20,9 @@ namespace RogueFefu
         private void DisplayOptions()
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            UserInterface.ConsoleWriteln("═════════════════", UserInterface.MapWidth, 2);
+            UserInterface.ConsoleWriteln(new string('*', 17), UserInterface.MapWidth, 2);
             UserInterface.ConsoleWriteln(" GAME MENU:", UserInterface.MapWidth, 3);
-            UserInterface.ConsoleWriteln("═════════════════", UserInterface.MapWidth, 4);
+            UserInterface.ConsoleWriteln(new string('*', 17), UserInterface.MapWidth, 4);
             string prefix;
             for (int i = 0; i < options.Length; i++)
             {

@@ -65,13 +65,12 @@ namespace RogueFefu
         }
         public void Begin()
         {
-            string logo = $"{GameLogo}\n\n" + $"Hello, {this.CurrentPlayer.PlayerName}! Let's start the game!\n" +
-                $"Starting Hero Stats:\nHealth:{CurrentPlayer.HP}\nDamage:{CurrentPlayer.Strength}";
+            string logo = $"{GameLogo}\n\n" + $"Hello, {this.CurrentPlayer.PlayerName}! Let's start the game!\n";
 
             Console.CursorVisible = false;
             string[] options = { "Start", "About", "Exit" };
             StartMenu startMenu = new StartMenu(options);
-            UserInterface ui = new UserInterface(logo, "Use the arrow keys to choose options and press enter to select one", startMenu);
+            UserInterface ui = new UserInterface(logo, "Use the arrow keys to choose options and press enter to select one", CurrentPlayer);
             int selectedIndex = startMenu.Run();
 
             switch (selectedIndex)
@@ -92,13 +91,13 @@ namespace RogueFefu
 
         private void ExitGame()
         {
-            UserInterface ui = new UserInterface(GameLogo, "Press any key to exit....", null!);
+            UserInterface ui = new UserInterface(GameLogo, "Press any key to exit....", CurrentPlayer);
             Console.ReadKey(true);
             Environment.Exit(0);
         }
         private void AboutGameText()
         {
-            UserInterface ui = new UserInterface($"{GameLogo}\n\nBla bla bla", "Press any key to return", null!);
+            UserInterface ui = new UserInterface($"{GameLogo}\n\nBla bla bla", "Press any key to return", CurrentPlayer);
             Console.ReadKey(true);
             Begin();
         }
@@ -112,33 +111,32 @@ namespace RogueFefu
 
         void LoadmapAndPlay()
         {
-            UserInterface ui = new UserInterface(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", null!);
+            UserInterface ui = new UserInterface(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", CurrentPlayer);
             do
             {
+                int currX = CurrentPlayer.Location.X;
+                int currY = CurrentPlayer.Location.Y;
                 int key = ReadKeyPressedByPlayer();
                 switch (key)
                 {
                     case ARROWUP:
                         MoveCharacter(CurrentPlayer, MapLevel.Direction.North);
-                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Menu);
-
                         break;
                     case ARROWDOWN:
                         MoveCharacter(CurrentPlayer, MapLevel.Direction.South);
-                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Menu);
                         break;
                     case ARROWLEFT:
                         MoveCharacter(CurrentPlayer, MapLevel.Direction.West);
-                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Menu);
                         break;
                     case ARROWRIGHT:
                         MoveCharacter(CurrentPlayer, MapLevel.Direction.East);
-                        ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Menu);
                         break;
                     case ESCAPE:
                         ExitGame();
                         break;
                 }
+                if (CurrentPlayer.Location.X != currX || CurrentPlayer.Location.Y != currY)
+                    ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Gamer);
             } while (!GameOver);
         }
 

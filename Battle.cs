@@ -148,7 +148,7 @@ namespace RogueFefu
             string promt = enemies[new Random().Next(0, enemies.Length)];
             string[] options = { "Attack", "Defend", "Run away" };
             StartMenu BattleMenu = new StartMenu(options);
-            UserInterface ui = new UserInterface($"\n{promt}", $"Battle! Your HP: {player.HP} Enemy HP: {enemy.HP}", BattleMenu);
+            UserInterface ui = new UserInterface($"\n{promt}", $"Battle! Your HP: {player.HP} Enemy HP: {enemy.HP}", player);
             BattleOver = false;
             do
             {
@@ -165,24 +165,24 @@ namespace RogueFefu
                         RunAway(ui);
                         break;
                 }
-                ui.UpdateUi(ui.Map, $"Battle! Your HP: {player.HP} Enemy HP: {enemy.HP}", BattleMenu);
+                ui.UpdateUi(ui.Map, $"Battle! Your HP: {player.HP} Enemy HP: {enemy.HP}", player);
             } while (!BattleOver);
         }
 
         private void Attack(Player player, Enemy enemy, UserInterface ui)
         {
-            ui.UpdateUi(ui.Map, "You attacked the enemy", ui.Menu);
+            ui.UpdateUi(ui.Map, "You attacked the enemy", ui.Gamer);
             player.HP = player.HP - enemy.Strength;
             enemy.HP = enemy.HP - player.Strength;
             if (player.HP <= 0)
             {
-                ui.UpdateUi(GameOver, "You lost! Press any key to continue...", ui.Menu);
+                ui.UpdateUi(GameOver, "You lost! Press any key to continue...", ui.Gamer);
                 BattleOver = true;
             }
 
             if (enemy.HP <= 0)
             {
-                ui.UpdateUi(ui.Map, "You won! Level up. Damage was promoted by 2 and health by 5 Press any key to continue...", ui.Menu);
+                ui.UpdateUi(ui.Map, "You won! Level up. Damage was promoted by 2 and health by 5 Press any key to continue...", ui.Gamer);
                 player.Strength = player.Strength + 2;
                 player.HP = player.HP + 2;
                 BattleOver = true;
@@ -190,20 +190,20 @@ namespace RogueFefu
 
             if (BattleOver != true)
             {
-                ui.UpdateUi(ui.Map, $"{ui.Status} Your HP: {player.HP} Enemy HP: {enemy.HP}", ui.Menu);
+                ui.UpdateUi(ui.Map, $"{ui.Status} Your HP: {player.HP} Enemy HP: {enemy.HP}", ui.Gamer);
             }
             Console.ReadKey(true);
         }
 
         private void Defend(Player player, Enemy enemy, UserInterface ui)
         {
-            ui.UpdateUi(ui.Map, "You used a shield. Press any key to continue...", ui.Menu);
+            ui.UpdateUi(ui.Map, "You used a shield. Press any key to continue...", ui.Gamer);
             Console.ReadKey(true);
         }
 
         private void RunAway(UserInterface ui)
         {
-            ui.UpdateUi(ui.Map, "Press any key to run away", ui.Menu);
+            ui.UpdateUi(ui.Map, "Press any key to run away", ui.Gamer);
             BattleOver = true;
             Console.ReadKey(true);
         }
