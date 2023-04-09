@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,13 +9,111 @@ namespace RogueFefu
 {
     internal class Dealer
     {
-        public const char CHARACTER = 'D';
-
-        public MapSpace? Location { get; set; }
-
-        public Dealer()
+        public int addExp = 1;
+        public int priceExp = 5;
+        public int addStrength = 5;
+        public int priceWeapon = 10;
+        public int addHP = 10;
+        public int priceArmor = 15;
+        public bool DealOver;
+        public void ItemsList(Player player)
         {
-            var rand = new Random();
+            Console.CursorVisible = false;
+            string[] dealer = { @"
+╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                              .-.                                                 ║
+║                                             [.-''-.,                                             ║
+║                                             |  //`~\)                                            ║
+║                                             (<| 0\0|>                                            ║
+║                                             ';\  _'/                                             ║
+║                                            __\|'._/_                                             ║
+║                                           /\ \    || )_///_\>>                                   ║
+║                                          (  '._ T |\ | _/),-'                                    ║
+║                                           '.   '._.-' /'/ |                                      ║
+║                                           | '._   _.'`-.._/                                      ║
+║                                           ,\ / '-' |/                                            ║
+║                                           [_/\-----j                                             ║
+║                                      _.--.__[_.--'_\__                                           ║
+║                                     /         `--'    '---._                                     ║
+║                                    /  '---.  -'. .'  _.--   '.                                   ║
+║                                    \_      '--.___ _;.-o     /                                   ║
+║                                      '.__ ___/______.__8----'                                    ║
+║                                        c-'----'                                                  ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════╝" };
+            string[] items = { $"Experience: {priceExp}", $"Armor: {priceArmor}", $"Weapon: {priceWeapon}", "Exit" };
+            string promt = dealer[0];
+            StartMenu DealerMenu = new StartMenu(items);
+            UserInterface ui = new UserInterface($"\n{promt}", $"Your Experience: {player.Experience} Your HP: {player.HP} Your Strength: {player.Strength} Gold: {player.Gold}", DealerMenu);
+            int selectedIndex = DealerMenu.Run();
+            DealOver = false;
+            switch (selectedIndex)
+            {
+                case 0:
+                    BuyExperience(player, ui);
+                    break;
+                case 1:
+                    BuyArmor(player, ui);
+                    break;
+                case 2:
+                    BuyWeapon(player, ui);
+                    break;
+                case 3:
+                    Exit(ui);
+                    break;
+            }
+            ui.UpdateUi(ui.Map, $"Your Experience: {player.Experience} Your HP: {player.HP} Your Strength: {player.Strength} Gold: {player.Gold}", DealerMenu);
+        }
+
+        private void BuyExperience(Player player, UserInterface ui)
+        {
+            if (player.Gold < priceExp)
+            {
+                ui.UpdateUi(ui.Map, "Not enough Gold", ui.Menu);
+            }
+            else
+            {
+                player.Experience += addExp;
+                player.Gold -= priceExp;
+                ui.UpdateUi(ui.Map, $"You bought an Experience Your Experience: {player.Experience} Your HP: {player.HP} Your Strength: {player.Strength} Gold: {player.Gold}", ui.Menu);
+            }
+            Console.ReadKey(true);
+        }
+
+        private void BuyArmor(Player player, UserInterface ui)
+        {
+            if (player.Gold < priceArmor)
+            {
+                ui.UpdateUi(ui.Map, "Not enough Gold", ui.Menu);
+            }
+            else
+            {
+                player.HP += addHP;
+                player.Gold -= priceArmor;
+                ui.UpdateUi(ui.Map, $"You bought an Armor Your Experience: {player.Experience} Your HP: {player.HP} Your Strength: {player.Strength} Gold: {player.Gold}", ui.Menu);
+            }
+            Console.ReadKey(true);
+        }
+
+        private void BuyWeapon(Player player, UserInterface ui)
+        {
+            if (player.Gold < priceWeapon)
+            {
+                ui.UpdateUi(ui.Map, "Not enough Gold", ui.Menu);
+            }
+            else
+            {
+                player.Strength += addStrength;
+                player.Gold -= priceWeapon;
+                ui.UpdateUi(ui.Map, $"You bought a Weapon Your Experience: {player.Experience} Your HP: {player.HP} Your Strength: {player.Strength} Gold: {player.Gold}", ui.Menu);
+            }
+            Console.ReadKey(true);
+        }
+
+        private void Exit(UserInterface ui)
+        {
+            ui.UpdateUi(ui.Map, "Press any key to exit", ui.Menu);
+            DealOver = true;
+            Console.ReadKey(true);
         }
     }
 }
