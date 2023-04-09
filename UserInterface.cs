@@ -63,7 +63,7 @@
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write($"<{Gamer.PlayerName}> ");
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write($"HP: {Gamer.HP} Damage: {Gamer.Strength} Experience: {Gamer.Experience} ");
+                Console.Write($"HP: {Gamer.HP} Damage: {Gamer.Strength} Experience: {Gamer.Experience} Level: {Gamer.Level} ");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.Write($"Gold: {Gamer.Gold}");
             }
@@ -72,6 +72,7 @@
         public string Map;
         public string Status;
         public Player Gamer;
+        public Game Level;
         public const int MapWidth = 101;
         public const int MapHeight = 25;
     }

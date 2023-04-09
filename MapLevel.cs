@@ -36,6 +36,7 @@ namespace RogueFefu
         public const char GOLD = '*';
         public const char ENEMY = 'E';
         public const char DEALER = 'D';
+        public const char AMULET = '♀';
         private const char EMPTY = ' ';
         private const int REGION_WD = 26;
         private const int REGION_HT = 8;
@@ -52,7 +53,6 @@ namespace RogueFefu
         private const int ROOM_DEALER_PCT = 50;
         public const int MIN_GOLD_AMT = 10;
         public const int MAX_GOLD_AMT = 125;
-        public const char AMULET = '♀';
 
         private MapSpace[,] levelMap = new MapSpace[80, 25];
 
@@ -153,11 +153,24 @@ namespace RogueFefu
 
             HallwayGeneration();
             AddStairway();
+            AddAmulet();
+        }
+
+        private void AddAmulet()
+        {
+            int x = 1; int y = 1;
+
+            while (levelMap[x, y].MapCharacter != ROOM_INT)
+            {
+                x = rand.Next(1, MAP_WD);
+                y = rand.Next(1, MAP_HT);
+            }
+
+            levelMap[x, y].ItemCharacter = AMULET;
         }
 
         private void AddStairway()
         {
-
             int x = 1; int y = 1;
 
             while (levelMap[x, y].MapCharacter != ROOM_INT)

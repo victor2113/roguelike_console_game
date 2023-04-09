@@ -18,13 +18,11 @@ namespace RogueFefu
         private const int ARROWRIGHT = 3;
         private const int ESCAPE = 4;
         private const int MAX_LEVEL = 26;
-
-
+       
         private bool GameOver = false;
         private int ButtonPressed;
 
         public MapLevel CurrentMap { get; set; }
-        public int CurrentLevel { get; set; }
         public Player CurrentPlayer { get; }
         public int CurrentTurn { get; set; }
         public Battle battlelvl { get; set; }
@@ -47,15 +45,13 @@ namespace RogueFefu
         public Game()
         {
             string PlayerName = "Tolya";
-            this.CurrentLevel = 1;
             this.CurrentMap = new MapLevel();
             this.CurrentPlayer = new Player(PlayerName);
             this.CurrentPlayer.Location = CurrentMap.PlaceMapCharacter(Player.CHARACTER, true);
         }
 
         public Game(string PlayerName)
-        {
-            this.CurrentLevel = 1;
+        {  
             this.CurrentMap = new MapLevel();
             this.CurrentPlayer = new Player(PlayerName);
             this.CurrentPlayer.Location = CurrentMap.PlaceMapCharacter(Player.CHARACTER, true);
@@ -111,6 +107,7 @@ namespace RogueFefu
 
         void LoadmapAndPlay()
         {
+            bool startTurn = false;
             UserInterface ui = new UserInterface(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", CurrentPlayer);
             do
             {
@@ -134,6 +131,19 @@ namespace RogueFefu
                     case ESCAPE:
                         ExitGame();
                         break;
+                }
+                if (key == 7)
+                {
+                    startTurn = true;
+                    if (CurrentPlayer.Location.MapCharacter == MapLevel.STAIRWAY)
+                        ChangeLevel(1);
+                    //else
+                    //"There's no stairway here.";
+                }
+                else
+                {
+
+
                 }
                 if (CurrentPlayer.Location.X != currX || CurrentPlayer.Location.Y != currY)
                     ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Gamer);
@@ -168,6 +178,18 @@ namespace RogueFefu
             {
                 ButtonPressed = 4;
             }
+            else if (keyPressed == ConsoleKey.OemComma)
+            {
+                ButtonPressed = 5;
+            }
+            else if (keyPressed == ConsoleKey.OemPeriod)
+            {
+                ButtonPressed = 6;
+            }
+            else if (keyPressed == ConsoleKey.L)
+            {
+                ButtonPressed = 7;
+            }
             return ButtonPressed;
         }
 
@@ -175,25 +197,20 @@ namespace RogueFefu
         {
             bool allowPass = false;
 
-            if (Change < 0)
+            if (Change > 0)
             {
-                allowPass = CurrentPlayer.HasAmulet && CurrentLevel > 1;
-                //сообщение allowPass ? "" : "You cannot go that way.";
-            }
-
-            else if (Change > 0)
-            {
-                allowPass = CurrentLevel < MAX_LEVEL;
-                //сообщение allowPass ? "" : "You have reached the bottom level.You must go the other way.";            
+                allowPass = CurrentPlayer.HasAmulet && CurrentPlayer.Level >= 1;
+                // "You cannot go that way.";
             }
 
             if (allowPass)
             {
                 CurrentMap = new MapLevel();
-                CurrentLevel += Change;
+                CurrentPlayer.Level += Change;
+                CurrentPlayer.HasAmulet = false;
                 CurrentPlayer.Location = CurrentMap.PlaceMapCharacter(Player.CHARACTER, true);
-
-                if (CurrentLevel == MAX_LEVEL && !CurrentPlayer.HasAmulet)
+               
+                if (CurrentPlayer.Level == MAX_LEVEL && !CurrentPlayer.HasAmulet)
                     CurrentMap.PlaceMapCharacter(MapLevel.AMULET, false);
             }
         }
@@ -202,7 +219,7 @@ namespace RogueFefu
         {
 
             List<char> charsAllowed =
-                new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,
+                new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,MapLevel.AMULET,
                 MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.ENEMY , MapLevel.DEALER};
             List<char?> charsEvent = new List<char?>() { MapLevel.ENEMY , MapLevel.DEALER }; ;
 
@@ -236,7 +253,7 @@ namespace RogueFefu
 
             if (player.Location.ItemCharacter == MapLevel.GOLD)
                 PickUpGold();
-            else if (player.Location.ItemCharacter != null)
+            else if (player.Location.ItemCharacter == MapLevel.AMULET)
                 AddInventory();
             
 
@@ -248,21 +265,14 @@ namespace RogueFefu
             CurrentPlayer.Gold += goldAmt;
 
             CurrentPlayer.Location.ItemCharacter = null;
-            //Сообщение $"You picked up {goldAmt} pieces of gold.";
+            
         }
 
-        private string AddInventory()
+        private void AddInventory()
         {
-            string retValue = "";
-
-            if (CurrentPlayer.Location!.ItemCharacter == MapLevel.AMULET)
-            {
-                CurrentPlayer.HasAmulet = true;
-                CurrentPlayer.Location!.ItemCharacter = null;
-                //retValue = "You found the Amulet of Yendor!  It has been added to your inventory.";
-            }
-
-            return retValue;
+            CurrentPlayer.HasAmulet = true;
+            CurrentPlayer.Location!.ItemCharacter = null;
+            //"You found the Amulet of Yendor!  It has been added to your inventory.";
         }
     }
 

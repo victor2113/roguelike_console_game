@@ -31,6 +31,7 @@ namespace RogueFefu
         public int Strength { get; set; }
         public int StrengthMod { get; set; }
         public int Gold { get; set; }
+        public int Level { get; set; }
         public int Experience { get; set; }
         public HungerLevel HungerState { get; set; }
         public int HungerTurn { get; set; }
@@ -46,6 +47,7 @@ namespace RogueFefu
             this.Strength = STARTING_STRENGTH;
             this.StrengthMod = 0;
             this.Gold = 0;
+            this.Level = 1;
             this.Experience = 1;
             this.HungerState = HungerLevel.Satisfied;
             this.HungerTurn = rand.Next(MIN_FOODVALUE, MAX_FOODVALUE + 1);
