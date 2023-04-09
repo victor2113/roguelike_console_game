@@ -29,6 +29,7 @@ namespace RogueFefu
         public int CurrentTurn { get; set; }
         public Battle battlelvl { get; set; }
         public Enemy CurrentEnemy { get; set; }
+        public Dealer dealer { get; set; }
 
         private static Random rand = new Random();
 
@@ -60,6 +61,7 @@ namespace RogueFefu
             this.CurrentPlayer.Location = CurrentMap.PlaceMapCharacter(Player.CHARACTER, true);
             this.battlelvl = new Battle();
             this.CurrentEnemy = new Enemy();
+            this.dealer = new Dealer();
         }
         public void Begin()
         {
@@ -208,10 +210,8 @@ namespace RogueFefu
 
             List<char> charAllowed =
                 new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,
-                //MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.ENEMY};
                 MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.DEALER};
-            //List<char?> charsEvent = new List<char?>() { MapLevel.ENEMY };
-            List<char?> charEvent = new List<char?>() { MapLevel.DEALER };
+            List<char?> charEvent = new List<char?>() { MapLevel.DEALER }; ;
 
 
             Dictionary<MapLevel.Direction, MapSpace> surrounding =
@@ -219,6 +219,7 @@ namespace RogueFefu
 
             if (charsEvent.Contains(surrounding[direct].ItemCharacter))
             {
+                //Console.WriteLine("fight!");
                 battlelvl.Begin(CurrentPlayer, CurrentEnemy);
                 player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
                 player.Location.ItemCharacter = null;
@@ -230,6 +231,20 @@ namespace RogueFefu
             {
                 player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
             }
+
+            if (charEvent.Contains(surrounding[direct].ItemCharacter))
+            {
+                dealer.ItemsList(CurrentPlayer);
+                player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
+            }
+
+
+            if (charAllowed.Contains(surrounding[direct].MapCharacter) &&
+                surrounding[direct].DisplayCharacter == null)
+            {
+                player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
+            }
+
 
             if (player.Location.ItemCharacter == MapLevel.GOLD)
                 PickUpGold();
