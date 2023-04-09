@@ -205,13 +205,11 @@ namespace RogueFefu
 
             List<char> charsAllowed =
                 new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,
-                MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.ENEMY};
-            List<char?> charsEvent = new List<char?>() { MapLevel.ENEMY }; ;
+                MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.ENEMY , MapLevel.DEALER};
+            List<char?> charsEvent = new List<char?>() { MapLevel.ENEMY , MapLevel.DEALER }; ;
 
-            List<char> charAllowed =
-                new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,
-                MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.DEALER};
-            List<char?> charEvent = new List<char?>() { MapLevel.DEALER }; ;
+            
+            
 
 
             Dictionary<MapLevel.Direction, MapSpace> surrounding =
@@ -219,37 +217,30 @@ namespace RogueFefu
 
             if (charsEvent.Contains(surrounding[direct].ItemCharacter))
             {
-                //Console.WriteLine("fight!");
-                battlelvl.Begin(CurrentPlayer, CurrentEnemy);
-                player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
-                player.Location.ItemCharacter = null;
+                if (surrounding[direct].ItemCharacter == MapLevel.ENEMY)
+                    battlelvl.Begin(CurrentPlayer, CurrentEnemy);
+                if (surrounding[direct].ItemCharacter == MapLevel.DEALER)
+                    dealer.ItemsList(player);
             }
-
+            
 
             if (charsAllowed.Contains(surrounding[direct].MapCharacter) &&
                 surrounding[direct].DisplayCharacter == null)
             {
                 player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
-            }
+                if(player.Location.ItemCharacter == MapLevel.ENEMY)
+                    player.Location.ItemCharacter = null;
 
-            if (charEvent.Contains(surrounding[direct].ItemCharacter))
-            {
-                dealer.ItemsList(CurrentPlayer);
-                player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
             }
 
 
-            if (charAllowed.Contains(surrounding[direct].MapCharacter) &&
-                surrounding[direct].DisplayCharacter == null)
-            {
-                player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
-            }
-
+            
 
             if (player.Location.ItemCharacter == MapLevel.GOLD)
                 PickUpGold();
             else if (player.Location.ItemCharacter != null)
                 AddInventory();
+            
 
         }
 

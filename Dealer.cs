@@ -42,8 +42,11 @@ namespace RogueFefu
 ╚══════════════════════════════════════════════════════════════════════════════════════════════════╝" };
             string[] items = { $"Experience: {priceExp}", $"Armor: {priceArmor}", $"Weapon: {priceWeapon}", "Exit" };
             string promt = dealer[0];
+
             StartMenu DealerMenu = new StartMenu(items);
-            UserInterface ui = new UserInterface($"\n{promt}", $"Your Experience: {player.Experience} Your HP: {player.HP} Your Strength: {player.Strength} Gold: {player.Gold}", DealerMenu);
+            UserInterface ui = 
+                new UserInterface($"\n{promt}", $"Your Experience: {player.Experience} Your HP: {player.HP} Your Strength: {player.Strength} Gold: {player.Gold}", DealerMenu);
+
             int selectedIndex = DealerMenu.Run();
             DealOver = false;
             switch (selectedIndex)

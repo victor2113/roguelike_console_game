@@ -572,6 +572,7 @@ namespace RogueFefu
 
             return levelMap[xPos, yPos];
         }
+        
 
         public MapSpace MoveDisplayItem(MapSpace Start, MapSpace Destination)
         {
