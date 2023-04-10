@@ -17,7 +17,7 @@ namespace RogueFefu
         private const int ARROWLEFT = 2;
         private const int ARROWRIGHT = 3;
         private const int ESCAPE = 4;
-        private const int MAX_LEVEL = 26;
+        private const int MAX_LEVEL = 5;
 
         private bool GameOver = false;
         private int ButtonPressed;
@@ -40,6 +40,16 @@ namespace RogueFefu
 ██║     ███████╗██║     ╚██████╔╝    ██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝███████╗╚██████╔╝██║ ╚████║             
 ╚═╝     ╚══════╝╚═╝      ╚═════╝     ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝   
                                                                               RogueLike game project
+";
+        public const string GameEnd = @"
+                                                                                                                 
+██╗██╗██╗██╗██╗██╗    ██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗██╗███╗   ██╗    ██╗██╗██╗██╗██╗██╗
+██║██║██║██║██║██║    ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██║████╗  ██║    ██║██║██║██║██║██║
+██║██║██║██║██║██║     ╚████╔╝ ██║   ██║██║   ██║    ██║ █╗ ██║██║██╔██╗ ██║    ██║██║██║██║██║██║
+╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝      ╚██╔╝  ██║   ██║██║   ██║    ██║███╗██║██║██║╚██╗██║    ╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝
+██╗██╗██╗██╗██╗██╗       ██║   ╚██████╔╝╚██████╔╝    ╚███╔███╔╝██║██║ ╚████║    ██╗██╗██╗██╗██╗██╗
+╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝       ╚═╝    ╚═════╝  ╚═════╝      ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝    ╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝
+                                                                            RogueLike game project
 ";
 
         public Game()
@@ -85,6 +95,7 @@ namespace RogueFefu
             Console.ReadKey(true);
         }
 
+
         private void ExitGame()
         {
             UserInterface ui = new UserInterface(GameLogo, "Press any key to exit....", CurrentPlayer);
@@ -103,6 +114,26 @@ namespace RogueFefu
             string level = this.CurrentMap.MapText();
             Console.ForegroundColor = ConsoleColor.Gray;
             return level;
+        }
+
+        public void End()
+        {
+            string logo = $"{GameEnd}\n\n" + $"Dear, {this.CurrentPlayer.PlayerName}! Thanks for playing our game!\n";
+
+            Console.CursorVisible = false;
+            string[] options = { "Exit" };
+            StartMenu startMenu = new StartMenu(options);
+            UserInterface ui = new UserInterface(logo, "Use the arrow keys to choose options and press enter to select one", CurrentPlayer);
+            int selectedIndex = startMenu.Run();
+
+            switch (selectedIndex)
+            {
+                case 0:
+                    ExitGame();
+                    break;
+            }
+
+            Console.ReadKey(true);
         }
 
         void LoadmapAndPlay()
@@ -132,11 +163,11 @@ namespace RogueFefu
                         ExitGame();
                         break;
                 }
-                if (key == 7)
+                if (key == 5)
                 {
                     startTurn = true;
                     if (CurrentPlayer.Location.MapCharacter == MapLevel.STAIRWAY)
-                        ChangeLevel(1);
+                        ChangeLevel(1, CurrentPlayer.PlayerName);
                     //else
                     //"There's no stairway here.";
                 }
@@ -178,40 +209,36 @@ namespace RogueFefu
             {
                 ButtonPressed = 4;
             }
-            else if (keyPressed == ConsoleKey.OemComma)
-            {
-                ButtonPressed = 5;
-            }
-            else if (keyPressed == ConsoleKey.OemPeriod)
-            {
-                ButtonPressed = 6;
-            }
             else if (keyPressed == ConsoleKey.L)
             {
-                ButtonPressed = 7;
+                ButtonPressed = 5;
             }
             return ButtonPressed;
         }
 
-        private void ChangeLevel(int Change)
+        private void ChangeLevel(int Change, string PlayerName)
         {
             bool allowPass = false;
 
             if (Change > 0)
             {
-                allowPass = CurrentPlayer.HasAmulet && CurrentPlayer.Level >= 1;
-                // "You cannot go that way.";
+                allowPass = CurrentPlayer.HasAmulet && CurrentPlayer.Level >= 1
+                    && CurrentPlayer.Experience >= (CurrentPlayer.Level*10);
             }
 
             if (allowPass)
             {
-                CurrentMap = new MapLevel();
-                CurrentPlayer.Level += Change;
-                CurrentPlayer.HasAmulet = false;
-                CurrentPlayer.Location = CurrentMap.PlaceMapCharacter(Player.CHARACTER, true);
-
-                if (CurrentPlayer.Level == MAX_LEVEL && !CurrentPlayer.HasAmulet)
-                    CurrentMap.PlaceMapCharacter(MapLevel.AMULET, false);
+                if (CurrentPlayer.Level == MAX_LEVEL && CurrentPlayer.HasAmulet
+                    && CurrentPlayer.Experience >= (CurrentPlayer.Level * 10))
+                    End();
+                
+                else
+                {
+                    CurrentMap = new MapLevel();
+                    CurrentPlayer.Level += Change;
+                    CurrentPlayer.HasAmulet = false;
+                    CurrentPlayer.Location = CurrentMap.PlaceMapCharacter(Player.CHARACTER, true);
+                }
             }
         }
 
@@ -222,10 +249,6 @@ namespace RogueFefu
                 new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,MapLevel.AMULET,
                 MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.ENEMY , MapLevel.DEALER};
             List<char?> charsEvent = new List<char?>() { MapLevel.ENEMY, MapLevel.DEALER }; ;
-
-
-
-
 
             Dictionary<MapLevel.Direction, MapSpace> surrounding =
                 CurrentMap.SearchAdjacent(player.Location.X, player.Location.Y);
@@ -251,15 +274,10 @@ namespace RogueFefu
 
             }
 
-
-
-
             if (player.Location.ItemCharacter == MapLevel.GOLD)
                 PickUpGold();
             else if (player.Location.ItemCharacter == MapLevel.AMULET)
                 AddInventory();
-
-
         }
 
         private void PickUpGold()
@@ -268,7 +286,7 @@ namespace RogueFefu
             CurrentPlayer.Gold += goldAmt;
 
             CurrentPlayer.Location.ItemCharacter = null;
-
+            //$"You picked up {goldAmt} pieces of gold.";
         }
 
         private void AddInventory()
