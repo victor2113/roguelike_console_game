@@ -210,6 +210,7 @@ namespace RogueFefu
                 }
                 mod = 0;
                 BattleOver = true;
+                player.runAway = false;
                 enemy.HP = rand.Next(40, 90);
                 enemy.Strength = rand.Next(2, 6);
             }
