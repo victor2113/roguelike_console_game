@@ -16,6 +16,7 @@ namespace RogueFefu
         public const int MIN_FOODVALUE = 900;
         private const int HUNGER_TURNS = 150;
         public const char CHARACTER = '@';
+        public bool runAway = false;
 
         public enum HungerLevel
         {

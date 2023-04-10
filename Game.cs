@@ -18,7 +18,7 @@ namespace RogueFefu
         private const int ARROWRIGHT = 3;
         private const int ESCAPE = 4;
         private const int MAX_LEVEL = 26;
-       
+
         private bool GameOver = false;
         private int ButtonPressed;
 
@@ -51,7 +51,7 @@ namespace RogueFefu
         }
 
         public Game(string PlayerName)
-        {  
+        {
             this.CurrentMap = new MapLevel();
             this.CurrentPlayer = new Player(PlayerName);
             this.CurrentPlayer.Location = CurrentMap.PlaceMapCharacter(Player.CHARACTER, true);
@@ -209,7 +209,7 @@ namespace RogueFefu
                 CurrentPlayer.Level += Change;
                 CurrentPlayer.HasAmulet = false;
                 CurrentPlayer.Location = CurrentMap.PlaceMapCharacter(Player.CHARACTER, true);
-               
+
                 if (CurrentPlayer.Level == MAX_LEVEL && !CurrentPlayer.HasAmulet)
                     CurrentMap.PlaceMapCharacter(MapLevel.AMULET, false);
             }
@@ -221,10 +221,10 @@ namespace RogueFefu
             List<char> charsAllowed =
                 new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,MapLevel.AMULET,
                 MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.ENEMY , MapLevel.DEALER};
-            List<char?> charsEvent = new List<char?>() { MapLevel.ENEMY , MapLevel.DEALER }; ;
+            List<char?> charsEvent = new List<char?>() { MapLevel.ENEMY, MapLevel.DEALER }; ;
 
-            
-            
+
+
 
 
             Dictionary<MapLevel.Direction, MapSpace> surrounding =
@@ -237,25 +237,28 @@ namespace RogueFefu
                 if (surrounding[direct].ItemCharacter == MapLevel.DEALER)
                     dealer.ItemsList(player);
             }
-            
+
 
             if (charsAllowed.Contains(surrounding[direct].MapCharacter) &&
                 surrounding[direct].DisplayCharacter == null)
             {
                 player.Location = CurrentMap.MoveDisplayItem(player.Location, surrounding[direct]);
-                if(player.Location.ItemCharacter == MapLevel.ENEMY)
+                if (player.Location.ItemCharacter == MapLevel.ENEMY && player.runAway == false)
+                {
                     player.Location.ItemCharacter = null;
+                }
+                    
 
             }
 
 
-            
+
 
             if (player.Location.ItemCharacter == MapLevel.GOLD)
                 PickUpGold();
             else if (player.Location.ItemCharacter == MapLevel.AMULET)
                 AddInventory();
-            
+
 
         }
 
@@ -265,7 +268,7 @@ namespace RogueFefu
             CurrentPlayer.Gold += goldAmt;
 
             CurrentPlayer.Location.ItemCharacter = null;
-            
+
         }
 
         private void AddInventory()

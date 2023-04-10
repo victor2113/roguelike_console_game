@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -169,7 +170,7 @@ namespace RogueFefu
                         Defend(player, enemy, ui);
                         break;
                     case 2:
-                        RunAway(enemy, ui);
+                        RunAway(player , enemy, ui);
                         break;
                 }
                 ui.UpdateUi(ui.Map, $"Battle is ongoing... Enemy HP: {enemy.HP}", player);
@@ -184,6 +185,7 @@ namespace RogueFefu
             if (player.HP <= 0)
             {
                 ui.UpdateUi(GameOver, "You lost! Press any key to continue...", ui.Gamer);
+                player.runAway = false;
                 BattleOver = true;
             }
 
@@ -193,11 +195,11 @@ namespace RogueFefu
                 player.HP += 4;
                 player.Strength += 4;
                 player.Gold += 20;
-                if((player.Experience + 4) < 5)
+                if ((player.Experience + 4) < 5)
                 {
                     player.Experience += 4;
                 }
-                else if ((player.Experience + 4)>= 5)
+                else if ((player.Experience + 4) >= 5)
                 {
                     mod = player.Experience + 4 - 5;
                     player.Experience = mod;
@@ -224,10 +226,11 @@ namespace RogueFefu
             Console.ReadKey(true);
         }
 
-        private void RunAway(Enemy enemy, UserInterface ui)
+        private void RunAway(Player player , Enemy enemy, UserInterface ui)
         {
             ui.UpdateUi(ui.Map, "Press any key to run away", ui.Gamer);
             BattleOver = true;
+            player.runAway = true;
             enemy.HP = rand.Next(40, 90);
             enemy.Strength = rand.Next(2, 6);
             Console.ReadKey(true);
