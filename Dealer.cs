@@ -11,10 +11,10 @@ namespace RogueFefu
     {
         public int addExp = 1;
         public int priceExp = 35;
-        public int addStrength = 5;
-        public int priceWeapon = 25;
         public int addHP = 10;
         public int priceArmor = 30;
+        public int addStrength = 5;
+        public int priceWeapon = 25;
         public bool DealOver;
         public void ItemsList(Player player)
         {
@@ -72,7 +72,10 @@ namespace RogueFefu
             if (player.Gold < priceExp)
             {
                 ui.UpdateUi(ui.Map, "Not enough Gold", ui.Gamer);
-                DealOver = true;
+                if (player.Gold < priceWeapon)
+                {
+                    DealOver = true;
+                }
             }
             else
             {
@@ -96,7 +99,10 @@ namespace RogueFefu
             if (player.Gold < priceArmor)
             {
                 ui.UpdateUi(ui.Map, "Not enough Gold", ui.Gamer);
-                DealOver = true;
+                if (player.Gold < priceWeapon)
+                {
+                    DealOver = true;
+                }
             }
             else
             {
