@@ -82,13 +82,13 @@ namespace RogueFefu
                 player.Experience += addExp;
                 player.Gold -= priceExp;
                 ui.UpdateUi(ui.Map, $"Experience promoted by {addExp}. Press a key to continue.", ui.Gamer);
-                if (player.Experience == 5)
+                if (player.Experience >= 10)
                 {
-                    player.Experience = 0;
-                    player.Level += 1;
-                    player.Strength += 5;
-                    player.HP += 5;
-                    ui.UpdateUi(ui.Map, $"Level Up! Hero damage and health are promoted by 5.", ui.Gamer);
+                    ui.UpdateUi(ui.Map, $"Find the amulet to Level Up.", ui.Gamer);
+                    if (player.HasAmulet == true)
+                    {
+                        ui.UpdateUi(ui.Map, $"Now you can Level Up!", ui.Gamer);
+                    }
                 }
             }
             Console.ReadKey(true);

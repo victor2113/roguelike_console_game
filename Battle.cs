@@ -170,7 +170,7 @@ namespace RogueFefu
                         Defend(player, enemy, ui);
                         break;
                     case 2:
-                        RunAway(player , enemy, ui);
+                        RunAway(player, enemy, ui);
                         break;
                 }
                 ui.UpdateUi(ui.Map, $"Battle is ongoing... Enemy HP: {enemy.HP}", player);
@@ -195,20 +195,15 @@ namespace RogueFefu
                 player.HP += 4;
                 player.Strength += 4;
                 player.Gold += 20;
-                if ((player.Experience + 4) < 5)
+                player.Experience += 4;
+                if (player.Experience >= 10) 
                 {
-                    player.Experience += 4;
+                    ui.UpdateUi(ui.Map, $"Find the amulet to Level Up.", ui.Gamer);
+                    if (player.HasAmulet == true)
+                    {
+                        ui.UpdateUi(ui.Map, $"Now you can Level Up!", ui.Gamer);
+                    }
                 }
-                else if ((player.Experience + 4) >= 5)
-                {
-                    mod = player.Experience + 4 - 5;
-                    player.Experience = mod;
-                    player.Level += 1;
-                    player.Strength += 5;
-                    player.HP += 5;
-                    ui.UpdateUi(ui.Map, $"Level Up! Hero damage and health are promoted by 5.", ui.Gamer);
-                }
-                mod = 0;
                 BattleOver = true;
                 player.runAway = false;
                 enemy.HP = rand.Next(40, 90);
@@ -227,7 +222,7 @@ namespace RogueFefu
             Console.ReadKey(true);
         }
 
-        private void RunAway(Player player , Enemy enemy, UserInterface ui)
+        private void RunAway(Player player, Enemy enemy, UserInterface ui)
         {
             ui.UpdateUi(ui.Map, "Press any key to run away", ui.Gamer);
             BattleOver = true;
