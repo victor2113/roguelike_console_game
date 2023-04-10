@@ -77,7 +77,15 @@ namespace RogueFefu
             {
                 player.Experience += addExp;
                 player.Gold -= priceExp;
-                ui.UpdateUi(ui.Map, $"You bought an Experience. Press a key to continue.", ui.Gamer);
+                ui.UpdateUi(ui.Map, $"Experience promoted by 1. Press a key to continue.", ui.Gamer);
+                if (player.Experience == 5)
+                {
+                    player.Experience = 0;
+                    player.Level += 1;
+                    player.Strength += 5;
+                    player.HP += 5;
+                    ui.UpdateUi(ui.Map, $"Level Up! Hero damage and health are promoted by 5.", ui.Gamer);
+                }
             }
             Console.ReadKey(true);
             ui.UpdateUi(ui.Map, $"Welcome {player.PlayerName}! Please buy some items here.", player);
@@ -85,34 +93,39 @@ namespace RogueFefu
 
         private void BuyArmor(Player player, UserInterface ui)
         {
-            if (player.Gold < priceArmor)
+            do
             {
-                ui.UpdateUi(ui.Map, "Not enough Gold", ui.Gamer);
-            }
-            else
-            {
-                player.HP += addHP;
-                player.Gold -= priceArmor;
-                ui.UpdateUi(ui.Map, $"You bought an Armor. Press a key to continue.", ui.Gamer);
-            }
-            Console.ReadKey(true);
-            ui.UpdateUi(ui.Map, $"Welcome {player.PlayerName}! Please buy some items here.", player);
+                if (player.Gold < priceArmor)
+                {
+                    ui.UpdateUi(ui.Map, "Not enough Gold", ui.Gamer);
+                }
+                else
+                {
+                    player.HP += addHP;
+                    player.Gold -= priceArmor;
+                    ui.UpdateUi(ui.Map, $"You bought an Armor. Press a key to continue.", ui.Gamer);
+                }
+                Console.ReadKey(true);
+                ui.UpdateUi(ui.Map, $"Welcome {player.PlayerName}! Please buy some items here.", player);
+            } while (DealOver == true);
         }
 
         private void BuyWeapon(Player player, UserInterface ui)
         {
-            if (player.Gold < priceWeapon)
-            {
-                ui.UpdateUi(ui.Map, "Not enough Gold", ui.Gamer);
-            }
-            else
-            {
-                player.Strength += addStrength;
-                player.Gold -= priceWeapon;
-                ui.UpdateUi(ui.Map, $"You bought a Weapon. Press a key to continue.", ui.Gamer);
-            }
-            Console.ReadKey(true);
-            ui.UpdateUi(ui.Map, $"Welcome {player.PlayerName}! Please buy some items here.", player);
+            do {
+                if (player.Gold < priceWeapon)
+                {
+                    ui.UpdateUi(ui.Map, "Not enough Gold", ui.Gamer);
+                }
+                else
+                {
+                    player.Strength += addStrength;
+                    player.Gold -= priceWeapon;
+                    ui.UpdateUi(ui.Map, $"You bought a Weapon. Damage promoted by 5. Press a key to continue.", ui.Gamer);
+                }
+                Console.ReadKey(true);
+                ui.UpdateUi(ui.Map, $"Welcome {player.PlayerName}! Please buy some items here.", player);
+            } while (DealOver == true);
         }
 
         private void Exit(UserInterface ui)

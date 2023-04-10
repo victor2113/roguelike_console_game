@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace RogueFefu
 ";
 
         public bool BattleOver;
+        private static Random rand = new Random();
         public void Begin(Player player, Enemy enemy)
         {
             Console.CursorVisible = false;
@@ -148,7 +150,12 @@ namespace RogueFefu
             string promt = enemies[new Random().Next(0, enemies.Length)];
             string[] options = { "Attack", "Defend", "Run away" };
             StartMenu BattleMenu = new StartMenu(options);
-            UserInterface ui = new UserInterface($"\n{promt}", $"Battle! Your HP: {player.HP} Enemy HP: {enemy.HP}", player);
+            /*if (flagLevelUp == 1)
+            {
+                player.HP += 5;
+                player.Strength += 5;
+            }*/
+            UserInterface ui = new UserInterface($"\n{promt}", $"Battle! Enemy stats: HP: {enemy.HP}, Strength: {enemy.Strength}", player);
             BattleOver = false;
             do
             {
@@ -162,16 +169,16 @@ namespace RogueFefu
                         Defend(player, enemy, ui);
                         break;
                     case 2:
-                        RunAway(ui);
+                        RunAway(enemy, ui);
                         break;
                 }
-                ui.UpdateUi(ui.Map, $"Battle! Your HP: {player.HP} Enemy HP: {enemy.HP}", player);
+                ui.UpdateUi(ui.Map, $"Battle is ongoing... Enemy HP: {enemy.HP}", player);
             } while (!BattleOver);
         }
-
+        public int mod = 0;
         private void Attack(Player player, Enemy enemy, UserInterface ui)
         {
-            ui.UpdateUi(ui.Map, "You attacked the enemy", ui.Gamer);
+            ui.UpdateUi(ui.Map, "You attacked the enemy.", ui.Gamer);
             player.HP = player.HP - enemy.Strength;
             enemy.HP = enemy.HP - player.Strength;
             if (player.HP <= 0)
@@ -182,15 +189,31 @@ namespace RogueFefu
 
             if (enemy.HP <= 0)
             {
-                ui.UpdateUi(ui.Map, "You won! Level up. Damage was promoted by 2 and health by 5 Press any key to continue...", ui.Gamer);
-                player.Strength = player.Strength + 2;
-                player.HP = player.HP + 2;
+                ui.UpdateUi(ui.Map, "You won! All stats and also experience are promoted by 4.", ui.Gamer);
+                player.HP += 4;
+                player.Strength += 4;
+                player.Gold += 20;
+                if((player.Experience + 4) < 5)
+                {
+                    player.Experience += 4;
+                }
+                else if ((player.Experience + 4)>= 5)
+                {
+                    mod = player.Experience + 4 - 5;
+                    player.Experience = mod;
+                    player.Level += 1;
+                    player.Strength += 5;
+                    player.HP += 5;
+                    ui.UpdateUi(ui.Map, $"Level Up! Hero damage and health are promoted by 5.", ui.Gamer);
+                }
+                mod = 0;
                 BattleOver = true;
+                enemy.HP = rand.Next(40, 90);
+                enemy.Strength = rand.Next(2, 6);
             }
-
             if (BattleOver != true)
             {
-                ui.UpdateUi(ui.Map, $"{ui.Status} Your HP: {player.HP} Enemy HP: {enemy.HP}", ui.Gamer);
+                ui.UpdateUi(ui.Map, $"{ui.Status}", ui.Gamer);
             }
             Console.ReadKey(true);
         }
@@ -201,10 +224,12 @@ namespace RogueFefu
             Console.ReadKey(true);
         }
 
-        private void RunAway(UserInterface ui)
+        private void RunAway(Enemy enemy, UserInterface ui)
         {
             ui.UpdateUi(ui.Map, "Press any key to run away", ui.Gamer);
             BattleOver = true;
+            enemy.HP = rand.Next(40, 90);
+            enemy.Strength = rand.Next(2, 6);
             Console.ReadKey(true);
         }
     }

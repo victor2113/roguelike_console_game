@@ -48,7 +48,7 @@ namespace RogueFefu
             this.StrengthMod = 0;
             this.Gold = 0;
             this.Level = 1;
-            this.Experience = 1;
+            this.Experience = 0;
             this.HungerState = HungerLevel.Satisfied;
             this.HungerTurn = rand.Next(MIN_FOODVALUE, MAX_FOODVALUE + 1);
             this.HasAmulet = false;
