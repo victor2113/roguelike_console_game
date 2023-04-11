@@ -7,7 +7,7 @@ namespace RogueFefu
         public int addHP = 10;
         public int addStrength = 5;
 
-        public void ItemInventory(Dealer dealer, Battle battle, Player player)
+        public void ItemInventory(Dealer dealer, Player player)
         {
             Console.CursorVisible = false;
             string[] invent = { @"
@@ -52,46 +52,49 @@ namespace RogueFefu
                         Exit(ui);
                         break;
                     case 1:
-                        UseArmor(player, dealer, battle, ui);
+                        UseArmor(player, dealer, ui);
                         break;
                     case 2:
-                        UseWeapon(player, dealer, battle, ui);
+                        UseWeapon(player, dealer, ui);
                         break;
                     case 3:
-                        AmuletInstruction(ui);
+                        AmuletInstruction(player, ui);
                         break;
                 }
-                ui.UpdateUi(ui.Map, "bla bla", player);
+                ui.UpdateUi(ui.Map, "Select an item to use or get information", player);
             } while (InventOver != true);
         }
 
-        private void UseArmor(Player player, Dealer dealer, Battle battle, UserInterface ui)
+        private void UseArmor(Player player, Dealer dealer, UserInterface ui)
         {
-            player.HP += addHP;
-            if (battle.countDamage == 7)
+            if (dealer.countArmor >= 1)
             {
+                player.HP += addHP;
                 dealer.countArmor -= 1;
-                battle.countDamage = 0;
+                player.HasArmor = true;
+                ui.UpdateUi(ui.Map, $"You use an Armor, your Health promoted by {addHP}.", ui.Gamer);
             }
-            ui.UpdateUi(ui.Map, $"You use an Armor, your Health promoted by {addHP}.", ui.Gamer);
             Console.ReadKey(true);
         }
 
-        private void UseWeapon(Player player, Dealer dealer, Battle battle, UserInterface ui)
+        private void UseWeapon(Player player, Dealer dealer, UserInterface ui)
         {
-            player.Strength += addStrength;
-            if (battle.countHit == 5)
+            if (dealer.countWeapon >= 1)
             {
+                player.Strength += addStrength;
                 dealer.countWeapon -= 1;
-                battle.countHit = 0;
+                player.HasWeapon = true;
+                ui.UpdateUi(ui.Map, $"You use a Weapon, your Strength promoted by {addStrength}.", ui.Gamer);
             }
-            ui.UpdateUi(ui.Map, $"You use a Weapon, your Strength promoted by {addStrength}.", ui.Gamer);
             Console.ReadKey(true);
         }
 
-        private void AmuletInstruction(UserInterface ui)
+        private void AmuletInstruction(Player player, UserInterface ui)
         {
-            ui.UpdateUi(ui.Map, "Now you can Level Up. Find Stairway.", ui.Gamer);
+            if (player.HasAmulet)
+            {
+                ui.UpdateUi(ui.Map, "Now you can Level Up. Find Stairway.", ui.Gamer);
+            }
             Console.ReadKey(true);
         }
 
@@ -104,4 +107,3 @@ namespace RogueFefu
     }
 
 }
-

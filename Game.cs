@@ -17,7 +17,7 @@ namespace RogueFefu
         private const int ARROWLEFT = 2;
         private const int ARROWRIGHT = 3;
         private const int ESCAPE = 4;
-        private const int MAX_LEVEL = 5;
+        private const int MAX_LEVEL = 1;
 
         private bool GameOver = false;
         private int ButtonPressed;
@@ -115,6 +115,9 @@ namespace RogueFefu
         {
             string level = this.CurrentMap.MapText();
             Console.ForegroundColor = ConsoleColor.Gray;
+            int key = ReadKeyPressedByPlayer();
+            if (key == 6)
+                inventory.ItemInventory(dealer, CurrentPlayer);
             return level;
         }
 
@@ -175,7 +178,7 @@ namespace RogueFefu
                     }
                     else
                     {
-                        ui.UpdateUi(CurrentMap.MapText(), $"Earn {CurrentPlayer.Level*10} Experience or Find the Amulet of Tolik", CurrentPlayer);
+                        ui.UpdateUi(CurrentMap.MapText(), $"Earn {CurrentPlayer.Level * 10} Experience or Find the Amulet of Tolik", CurrentPlayer);
                         Console.ReadKey(true);
                     }
                 }
@@ -193,10 +196,10 @@ namespace RogueFefu
                         Console.ReadKey(true);
                     }
                 }
-                if (key == 6)
+                /*if (key == 6)
                 {
                     inventory.ItemInventory(dealer, battlelvl, CurrentPlayer);
-                }
+                }*/
                 if (CurrentPlayer.Location.X != currX || CurrentPlayer.Location.Y != currY)
                     ui.UpdateUi(LoadMapLevel(), "Use arrows keys to walk, ESC to exit game.", ui.Gamer);
             } while (!GameOver);
@@ -248,7 +251,7 @@ namespace RogueFefu
             if (Change > 0)
             {
                 allowPass = CurrentPlayer.HasAmulet && CurrentPlayer.Level >= 1
-                    && CurrentPlayer.Experience >= (CurrentPlayer.Level*10);
+                    && CurrentPlayer.Experience >= (CurrentPlayer.Level * 10);
             }
 
             if (allowPass)
@@ -256,7 +259,7 @@ namespace RogueFefu
                 if (CurrentPlayer.Level == MAX_LEVEL && CurrentPlayer.HasAmulet
                     && CurrentPlayer.Experience >= (CurrentPlayer.Level * 10))
                     End();
-                
+
                 else
                 {
                     CurrentMap = new MapLevel();
@@ -269,7 +272,6 @@ namespace RogueFefu
 
         public void MoveCharacter(Player player, MapLevel.Direction direct)
         {
-
             List<char> charsAllowed =
                 new List<char>(){MapLevel.ROOM_INT, MapLevel.STAIRWAY,MapLevel.AMULET,
                 MapLevel.ROOM_DOOR, MapLevel.HALLWAY , MapLevel.ENEMY , MapLevel.DEALER};
@@ -281,7 +283,7 @@ namespace RogueFefu
             if (charsEvent.Contains(surrounding[direct].ItemCharacter))
             {
                 if (surrounding[direct].ItemCharacter == MapLevel.ENEMY)
-                    battlelvl.Begin(CurrentPlayer, CurrentEnemy);
+                    battlelvl.Begin(CurrentPlayer, CurrentEnemy, dealer);
                 if (surrounding[direct].ItemCharacter == MapLevel.DEALER)
                     dealer.ItemsList(player);
             }
@@ -295,8 +297,6 @@ namespace RogueFefu
                 {
                     player.Location.ItemCharacter = null;
                 }
-                    
-
             }
 
             if (player.Location.ItemCharacter == MapLevel.GOLD)

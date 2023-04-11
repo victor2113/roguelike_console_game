@@ -37,6 +37,10 @@ namespace RogueFefu
         public HungerLevel HungerState { get; set; }
         public int HungerTurn { get; set; }
         public bool HasAmulet { get; set; }
+        public bool HasArmor { get; set; }
+        public bool HasWeapon { get; set; }
+
+
         public MapSpace? Location { get; set; }
 
         public Player(string PlayerName)
@@ -53,6 +57,8 @@ namespace RogueFefu
             this.HungerState = HungerLevel.Satisfied;
             this.HungerTurn = rand.Next(MIN_FOODVALUE, MAX_FOODVALUE + 1);
             this.HasAmulet = false;
+            this.HasArmor = false;
+            this.HasWeapon = false;
         }
     }
 }
