@@ -175,7 +175,7 @@ namespace RogueFefu
                     }
                     else
                     {
-                        ui.UpdateUi(CurrentMap.MapText(), "Earn 10 Experience or Find the Amulet of Tolik", CurrentPlayer);
+                        ui.UpdateUi(CurrentMap.MapText(), $"Earn {CurrentPlayer.Level*10} Experience or Find the Amulet of Tolik", CurrentPlayer);
                         Console.ReadKey(true);
                     }
                 }
