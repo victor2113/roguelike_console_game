@@ -22,6 +22,7 @@ namespace RogueFefu
 ";
 
         public bool BattleOver;
+        public int enemysum = 0;
         private static Random rand = new Random();
         public void Begin(Player player, Enemy enemy)
         {
@@ -158,6 +159,7 @@ namespace RogueFefu
             }*/
             UserInterface ui = new UserInterface($"\n{promt}", $"Battle! Enemy stats: HP: {enemy.HP}, Strength: {enemy.Strength}", player);
             BattleOver = false;
+            
             do
             {
                 int selectedIndex = BattleMenu.Run();
@@ -192,11 +194,12 @@ namespace RogueFefu
             if (enemy.HP <= 0)
             {
                 ui.UpdateUi(ui.Map, "You won! All stats and also experience are promoted by 4.", ui.Gamer);
-                player.HP += 4;
-                player.Strength += 4;
+                enemysum += 1;
+                player.HP += 5;
+                player.Strength += 5;
                 player.Gold += 20;
-                player.Experience += 4;
-                if (player.Experience >= 10) 
+                player.Experience += 5;
+                if (player.Experience >= 10)
                 {
                     ui.UpdateUi(ui.Map, $"Find the amulet to Level Up.", ui.Gamer);
                     if (player.HasAmulet == true)
@@ -206,8 +209,8 @@ namespace RogueFefu
                 }
                 BattleOver = true;
                 player.runAway = false;
-                enemy.HP = rand.Next(40, 90);
-                enemy.Strength = rand.Next(2, 6);
+                enemy.HP = 25 + enemysum * 10;
+                enemy.Strength = 2 + enemysum * 2;
             }
             if (BattleOver != true)
             {
@@ -227,8 +230,6 @@ namespace RogueFefu
             ui.UpdateUi(ui.Map, "Press any key to run away", ui.Gamer);
             BattleOver = true;
             player.runAway = true;
-            enemy.HP = rand.Next(40, 90);
-            enemy.Strength = rand.Next(2, 6);
             Console.ReadKey(true);
         }
     }
