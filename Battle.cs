@@ -191,7 +191,7 @@ namespace RogueFefu
                 player.runAway = false;
                 BattleOver = true;
                 Console.ReadKey(true);
-                game.Begin();
+                game.Begin(player.PlayerName);
             }
 
             else if (enemy.HP <= 0)
