@@ -13,7 +13,7 @@ namespace RogueFefu
         private static Random rand = new Random();
         private const int STARTING_HP = 25;
         private const int STARTING_STRENGTH = 2;
- 
+
         public int HP { get; set; }
         public int HPDamage { get; set; }
         public int Strength { get; set; }
