@@ -23,6 +23,8 @@ namespace RogueFefu
 
         public bool BattleOver;
         public int enemysum = 0;
+        public int countHit = 0;
+        public int countDamage = 0;
         private static Random rand = new Random();
         Game game = new Game();
         public void Begin(Player player, Enemy enemy)
@@ -185,13 +187,16 @@ namespace RogueFefu
             ui.UpdateUi(ui.Map, "You attacked the enemy.", ui.Gamer);
             player.HP = player.HP - enemy.Strength;
             enemy.HP = enemy.HP - player.Strength;
+
+            countHit += 1;
+            countDamage += 1;
+
             if (player.HP <= 0)
             {
                 ui.UpdateUi(GameOver, "You lost! Press any key to continue...", ui.Gamer);
                 player.runAway = false;
                 BattleOver = true;
                 Console.ReadKey(true);
-                Game game = new Game(player.PlayerName);
                 game.Begin();
             }
 
@@ -204,18 +209,18 @@ namespace RogueFefu
                 player.Experience += 5;
                 ui.UpdateUi(ui.Map, "You won! All stats and also experience are promoted by 5.", ui.Gamer);
                 Console.ReadKey(true);
-                if (player.Experience >= 10)
+                if (player.Experience >= 10) 
                 {
                     ui.UpdateUi(ui.Map, $"Find the amulet to Level Up.", ui.Gamer);
                     if (player.HasAmulet == true)
                     {
-                        ui.UpdateUi(ui.Map, $"Now you can Level Up!", ui.Gamer);
+                        ui.UpdateUi(ui.Map, $"Now you can Level Up! Find Stairway.", ui.Gamer);
                     }
                 }
                 BattleOver = true;
                 player.runAway = false;
                 enemy.HP = 25 + enemysum * 10;
-                enemy.Strength = 2 + enemysum * 2;
+                enemy.Strength = 3 + enemysum * 3;
             }
             if (BattleOver != true)
             {
