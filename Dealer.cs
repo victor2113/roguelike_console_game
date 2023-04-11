@@ -82,6 +82,7 @@ namespace RogueFefu
                 player.Experience += addExp;
                 player.Gold -= priceExp;
                 ui.UpdateUi(ui.Map, $"Experience promoted by {addExp}. Press a key to continue.", ui.Gamer);
+                Console.ReadKey(true);
                 if (player.Experience >= 10)
                 {
                     ui.UpdateUi(ui.Map, $"Find the amulet to Level Up.", ui.Gamer);
