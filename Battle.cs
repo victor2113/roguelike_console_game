@@ -191,7 +191,8 @@ namespace RogueFefu
                 player.runAway = false;
                 BattleOver = true;
                 Console.ReadKey(true);
-                game.Begin(player.PlayerName);
+                Game game = new Game(player.PlayerName);
+                game.Begin();
             }
 
             else if (enemy.HP <= 0)
@@ -203,7 +204,7 @@ namespace RogueFefu
                 player.Experience += 5;
                 ui.UpdateUi(ui.Map, "You won! All stats and also experience are promoted by 5.", ui.Gamer);
                 Console.ReadKey(true);
-                if (player.Experience >= 10) 
+                if (player.Experience >= 10)
                 {
                     ui.UpdateUi(ui.Map, $"Find the amulet to Level Up.", ui.Gamer);
                     if (player.HasAmulet == true)
