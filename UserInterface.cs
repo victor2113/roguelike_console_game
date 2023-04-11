@@ -48,16 +48,7 @@
 
         private void WriteStatus(string s)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            ConsoleWriteln($"{new string('*', MapWidth)}", 0, MapHeight);
-            ConsoleWriteln($"* ", 0, MapHeight + 1);
-            Console.ForegroundColor = ConsoleColor.White;
-            ConsoleWriteln($"{s}{new string(' ', MapWidth - s.Length - 3)}", 2, MapHeight + 1);
-            Console.ForegroundColor = ConsoleColor.Green;
-            ConsoleWriteln("*", MapWidth - 1, MapHeight + 1);
-            ConsoleWriteln($"{new string('*', MapWidth)}", 0, MapHeight + 2);
-
-            Console.SetCursorPosition(0, MapHeight + 3);
+            Console.SetCursorPosition(0, MapHeight);
             if (Gamer != null)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -67,6 +58,15 @@
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.Write($"Gold: {Gamer.Gold}");
             }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            ConsoleWriteln($"{new string('*', MapWidth)}", 0, MapHeight + 1);
+            ConsoleWriteln($"* ", 0, MapHeight + 2);
+            Console.ForegroundColor = ConsoleColor.White;
+            ConsoleWriteln($"{s}{new string(' ', MapWidth - s.Length - 3)}", 2, MapHeight + 2);
+            Console.ForegroundColor = ConsoleColor.Green;
+            ConsoleWriteln("*", MapWidth - 1, MapHeight + 2);
+            ConsoleWriteln($"{new string('*', MapWidth)}", 0, MapHeight + 3);
         }
 
         public string Map;
