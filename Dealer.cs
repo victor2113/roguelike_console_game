@@ -11,11 +11,14 @@ namespace RogueFefu
     {
         public int addExp = 1;
         public int priceExp = 35;
-        public int addHP = 10;
+        public int addHP = 10;//
         public int priceArmor = 30;
-        public int addStrength = 5;
+        public int countArmor = 0;
+        public int addStrength = 5;//
         public int priceWeapon = 25;
+        public int countWeapon = 0;
         public bool DealOver;
+
         public void ItemsList(Player player)
         {
             Console.CursorVisible = false;
@@ -88,7 +91,7 @@ namespace RogueFefu
                     ui.UpdateUi(ui.Map, $"Find the amulet to Level Up.", ui.Gamer);
                     if (player.HasAmulet == true)
                     {
-                        ui.UpdateUi(ui.Map, $"Now you can Level Up!", ui.Gamer);
+                        ui.UpdateUi(ui.Map, $"Now you can Level Up! Find Stairway.", ui.Gamer);
                     }
                 }
             }
@@ -107,9 +110,9 @@ namespace RogueFefu
             }
             else
             {
-                player.HP += addHP;
                 player.Gold -= priceArmor;
-                ui.UpdateUi(ui.Map, $"You bought an Armor. Your Health promoted by {addHP}.", player);
+                countArmor += 1;
+                ui.UpdateUi(ui.Map, $"You bought an Armor.", player);
             }
             Console.ReadKey(true);
         }
@@ -123,9 +126,9 @@ namespace RogueFefu
             }
             else
             {
-                player.Strength += addStrength;
                 player.Gold -= priceWeapon;
-                ui.UpdateUi(ui.Map, $"You bought a Weapon. Your Strength promoted by {addStrength}.", player);
+                countWeapon += 1;
+                ui.UpdateUi(ui.Map, $"You bought a Weapon.", player);
             }
             Console.ReadKey(true);
         }

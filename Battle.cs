@@ -23,9 +23,10 @@ namespace RogueFefu
 
         public bool BattleOver;
         public int enemysum = 0;
+        public int countHit = 0;
+        public int countDamage = 0;
         private static Random rand = new Random();
-        Game game = new Game();
-        public void Begin(Player player, Enemy enemy)
+        public void Begin(Player player, Enemy enemy, Dealer dealer)
         {
             Console.CursorVisible = false;
             string[] enemies = { @"
@@ -167,7 +168,7 @@ namespace RogueFefu
                 switch (selectedIndex)
                 {
                     case 0:
-                        Attack(player, enemy, ui);
+                        Attack(player, enemy, dealer, ui);
                         break;
                     case 1:
                         Defend(player, enemy, ui);
@@ -180,11 +181,16 @@ namespace RogueFefu
             } while (!BattleOver);
         }
         public int mod = 0;
-        private void Attack(Player player, Enemy enemy, UserInterface ui)
+        private void Attack(Player player, Enemy enemy, Dealer dealer, UserInterface ui)
         {
             ui.UpdateUi(ui.Map, "You attacked the enemy.", ui.Gamer);
             player.HP = player.HP - enemy.Strength;
             enemy.HP = enemy.HP - player.Strength;
+            if (player.HasWeapon)
+                countHit += 1;
+            if (player.HasArmor)
+                countDamage += 1;
+
             if (player.HP <= 0)
             {
                 ui.UpdateUi(GameOver, "You lost! Press any key to continue...", ui.Gamer);
@@ -204,18 +210,32 @@ namespace RogueFefu
                 player.Experience += 5;
                 ui.UpdateUi(ui.Map, "You won! All stats and also experience are promoted by 5.", ui.Gamer);
                 Console.ReadKey(true);
+                if (countDamage == 7)
+                {
+                    player.HasArmor = false;
+                    countDamage = 0;
+                    ui.UpdateUi(ui.Map, $"Armor is broken. Use another one or buy from the Dealer.", ui.Gamer);
+                    Console.ReadKey(true);
+                }
+                if (countHit == 5)
+                {
+                    player.HasWeapon = false;
+                    countHit = 0;
+                    ui.UpdateUi(ui.Map, $"Weapon is broken. Use another one or buy from the Dealer.", ui.Gamer);
+                    Console.ReadKey(true);
+                }
                 if (player.Experience >= 10)
                 {
                     ui.UpdateUi(ui.Map, $"Find the amulet to Level Up.", ui.Gamer);
                     if (player.HasAmulet == true)
                     {
-                        ui.UpdateUi(ui.Map, $"Now you can Level Up!", ui.Gamer);
+                        ui.UpdateUi(ui.Map, $"Now you can Level Up! Find Stairway.", ui.Gamer);
                     }
                 }
                 BattleOver = true;
                 player.runAway = false;
                 enemy.HP = 25 + enemysum * 10;
-                enemy.Strength = 2 + enemysum * 2;
+                enemy.Strength = 3 + enemysum * 3;
             }
             if (BattleOver != true)
             {
